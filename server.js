@@ -64,17 +64,10 @@ class BrainController extends TelegramBaseController{
             lib.arr.forEach((element) => {
                 let alphabet = element.container.alph
                 if(alphabet == input){
-                    $.sendMessage(`${user}, Here are all the words in the alphabet`)
                     let words = element.container.words
                     // let pages = element.container.pages
-                    let file = fs.createWriteStream('./text/alphList.txt')
                     checker = true
-                    words.forEach((el) => {
-                        file.write(`${el}\n`)                        
-                    })
-                    let alphList = fs.readFileSync("./text/alphList.txt", "utf-8")
-                    console.log(alphList)
-                    $.sendMessage(`${alphList}`, { parse_mode: "Markdown"})
+                    $.sendMessage(this._serializeList((words), {parse_mode: 'Markdown'}))                  
 
                 } 
             });
@@ -99,6 +92,14 @@ class BrainController extends TelegramBaseController{
             'alphSearchCommand' : 'alphSearchHandler',
             'helpCommand' : 'helpHandler'
         }
+    }
+
+    _serializeList(words) {
+        let serialized = '*Here are all the words in this alphabet*\n';
+        words.forEach((word) => {
+            serialized +=  `${word}\n`
+        })
+        return serialized;
     }
 }
 
