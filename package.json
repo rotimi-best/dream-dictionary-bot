@@ -4,10 +4,14 @@
   "description": "interpret dreams",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
   "author": "Ibitoye Best",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Rotimi-Best/dream-dictionary-bot"
+  },
   "dependencies": {
     "telegram-node-bot": "^4.0.5"
   }

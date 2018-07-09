@@ -2,9 +2,10 @@
 
             // Dream dictionary bot  
 const Telegram = require('telegram-node-bot')
+const constants = require('./lib/constants')
 const TelegramBaseController = Telegram.TelegramBaseController
 const TextCommand = Telegram.TextCommand
-const bot = new Telegram.Telegram('529605138:AAFGYfp_bNUWaxGnbiG5VGMGrQ-Q4bFK324', {
+const bot = new Telegram.Telegram(constants.API_KEY, {
     workers: 1
 });
 const lib = require('./text/libArray')
@@ -71,7 +72,8 @@ class BrainController extends TelegramBaseController{
                     words.forEach((el) => {
                         file.write(`${el}\n`)                        
                     })
-                    let alphList = fs.readFileSync("./text/alphList.txt")
+                    let alphList = fs.readFileSync("./text/alphList.txt", "utf-8")
+                    console.log(alphList)
                     $.sendMessage(`${alphList}`, { parse_mode: "Markdown"})
 
                 } 
