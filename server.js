@@ -8,6 +8,7 @@ const bot = new Telegram.Telegram('529605138:AAFGYfp_bNUWaxGnbiG5VGMGrQ-Q4bFK324
     workers: 1
 });
 const lib = require('./text/libArray')
+const fs = require('fs')
 
 class BrainController extends TelegramBaseController{
     /**
@@ -64,13 +65,15 @@ class BrainController extends TelegramBaseController{
                 if(alphabet == input){
                     $.sendMessage(`${user}, Here are all the words in the alphabet`)
                     let words = element.container.words
-                    let pages = element.container.pages
+                    // let pages = element.container.pages
+                    let file = fs.createWriteStream('./text/alphList.txt')
                     checker = true
-                    words.forEach((el, index) => {
-                        wordArr.push(el)
-                        pageArr.push(index)
+                    words.forEach((el) => {
+                        file.write(`${el}\n`)                        
                     })
-                    $.sendMessage(``, { parse_mode: "Markdown"})
+                    let alphList = fs.readFileSync("./text/alphList.txt")
+                    $.sendMessage(`${alphList}`, { parse_mode: "Markdown"})
+
                 } 
             });
             if(!checker){
