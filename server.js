@@ -2,7 +2,7 @@
 
             // Dream dictionary bot  
 const Telegram = require('telegram-node-bot')
-const constants = require('./lib/constants')
+const constants = require('./constants')
 const TelegramBaseController = Telegram.TelegramBaseController
 const TextCommand = Telegram.TextCommand
 const bot = new Telegram.Telegram(constants.API_KEY, {
@@ -95,7 +95,7 @@ class BrainController extends TelegramBaseController{
     }
 
     _serializeList(words) {
-        let serialized = '*Here are all the words in this alphabet*\n';
+        let serialized = 'Here are all the words in this alphabet\n\n';
         words.forEach((word) => {
             serialized +=  `${word}\n`
         })
