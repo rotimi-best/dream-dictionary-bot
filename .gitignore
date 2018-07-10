@@ -3,3 +3,4 @@ constants.js
 /img
 /.vscode
 .env
+/node_modules
