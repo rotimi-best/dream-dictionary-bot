@@ -2,10 +2,10 @@
 
             // Dream dictionary bot  
 const Telegram = require('telegram-node-bot')
-const constants = require('./constants')
+require('dotenv').config();
 const TelegramBaseController = Telegram.TelegramBaseController
 const TextCommand = Telegram.TextCommand
-const bot = new Telegram.Telegram(constants.API_KEY, {
+const bot = new Telegram.Telegram(process.env.API_KEY, {
     workers: 1
 });
 const lib = require('./text/libArray')
@@ -67,7 +67,7 @@ class BrainController extends TelegramBaseController{
                     let words = element.container.words
                     // let pages = element.container.pages
                     checker = true
-                    $.sendMessage(this._serializeList((words), {parse_mode: 'Markdown'}))                  
+                    $.sendMessage(this._serializeList(words), {parse_mode: 'Markdown'})                  
 
                 } 
             });
@@ -95,7 +95,7 @@ class BrainController extends TelegramBaseController{
     }
 
     _serializeList(words) {
-        let serialized = 'Here are all the words in this alphabet\n\n';
+        let serialized = '*Here are all the words in this alphabet*\n';
         words.forEach((word) => {
             serialized +=  `${word}\n`
         })

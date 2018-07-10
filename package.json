@@ -13,6 +13,7 @@
     "url": "https://github.com/Rotimi-Best/dream-dictionary-bot"
   },
   "dependencies": {
+    "dotenv": "^6.0.0",
     "telegram-node-bot": "^4.0.5"
   }
 }
