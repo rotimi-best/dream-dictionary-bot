@@ -18,3 +18,5 @@ e.g /findbyalphabet p \n
 In the coming version you can be able to find the interpretaions directly from the bot without the dream dictionary.
 
 Have any question? Ask my creator https://t.me/Lover_Of_Jesus
+
+To get started *click the backslash* on the _bottom right of the screen_ ( it looks like this [/] ).\nThere you would see the list of commands available for you to use.\nClick on /help to see examples of how to use me. 
