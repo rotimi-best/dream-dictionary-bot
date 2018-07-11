@@ -19,26 +19,30 @@ class BrainController extends TelegramBaseController{
             let found = false
             let matched, page
             let firstLetter = input.match(/\w/);
-            lib.arr.forEach((element) => {
-                let alphabet = element.container.alph
-                if(alphabet == firstLetter['0']){
-                    let words = element.container.words
-                    words.forEach((el, index) => {
-                        let reg = new RegExp('\\b' + input + '\\b', 'gi')
-                        let matchWord = el.match(reg)
-                        if(matchWord){
-                            found = true
-                            matched = matchWord['0']
-                            page = element.container.pages[index]
-                        }
-                    })
-                }	
-            });
-            if(found){		
-                $.sendMessage(`Hurray, the word ${matched.charAt(0).toUpperCase() + matched.slice(1)} was found in page ${page}`)
-            } else {
-                $.sendMessage(`Sorry ${user}, ${input} wasn't found, try adding/removing (s) at the end of the word`)
-            }
+            if(firstLetter){
+                lib.arr.forEach((element) => {
+                    let alphabet = element.container.alph
+                    if(alphabet == firstLetter['0']){
+                        let words = element.container.words
+                        words.forEach((el, index) => {
+                            let reg = new RegExp('\\b' + input + '\\b', 'gi')
+                            let matchWord = el.match(reg)
+                            if(matchWord){
+                                found = true
+                                matched = matchWord['0']
+                                page = element.container.pages[index]
+                            }
+                        })
+                    }	
+                });
+                if(found){		
+                    $.sendMessage(`Hurray, the word ${matched.charAt(0).toUpperCase() + matched.slice(1)} was found in page ${page}`)
+                } else {
+                    $.sendMessage(`Sorry ${user}, ${input} wasn't found, try adding/removing (s) at the end of the word`)
+                }
+            }else {
+                $.sendMessage(`Sorry ${user}, your input isn't valid. Make sure you entered an english word`)
+              }
         } else {
             $.sendMessage(`Sorry ${user}, your input isn't valid. click /help for more info.`)
         }
