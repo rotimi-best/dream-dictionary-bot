@@ -14,6 +14,7 @@ const BrainController = require('./controllers/brainController')
 bot.router
     .when(new TextCommand('/findbyword', 'wordSearchCommand'), new BrainController())
     .when(new TextCommand('/findbyalphabet', 'alphSearchCommand'), new BrainController())
+    .when(new TextCommand('/spellchecker', 'spellCheckerCommand'), new BrainController())
     .when(new TextCommand('/help', 'helpCommand'), new BrainController())
     .when(new TextCommand('/start', 'startCommand'), new BrainController())
     .otherwise(new OtherwiseController()) 
