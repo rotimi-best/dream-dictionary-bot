@@ -31,7 +31,7 @@ Hurray, the word Flowers was found in page 392.
 
 The result will look like this:
 ```
-**Here You Go <Your_name>**
+Here You Go <Your_name>
 Zebra => 825
 Zero => 825
 Zinc => 825
