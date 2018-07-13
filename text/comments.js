@@ -18,3 +18,5 @@ letters.forEach(function(val,index, array){
 	let len = handleAlph(val)
 	console.log('Alphabet: ', val, '. Length: ', len)
 })
+
+// Server https://glitch.com/edit/#!/dream-dictionary?path=server.js:1:0
