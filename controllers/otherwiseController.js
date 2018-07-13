@@ -8,7 +8,7 @@ class OtherwiseController extends BaseController {
      * @param {Scope} $
      */
     handle($) {
-        $.sendMessage('Sorry, I don\'t understand')
+        $.sendMessage('Sorry, I don\'t understand, check out my full capacity /help ))')
     }
 
 }
