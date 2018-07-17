@@ -5,9 +5,139 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Console logger</title>
         <script data-main="index.js" src="require.js"></script> 
+        <style>
+            body{
+                font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+                color: #24292e;
+            }
+
+            h1{
+                display: block;
+                font-weight: 600px;
+                line-height: 1.25;
+            }
+            hr{
+                border: 0;
+                height: 1px;
+                background: #333;
+                background-image: linear-gradient(to right, #ccc, #333, #ccc);
+            }
+            p{
+                line-height: 1.52;
+            }
+            a{
+                text-decoration: none;
+                color: blue;
+            }
+            .container{
+                width: 90%;
+                margin: auto;
+                border: 2px solid #f6f8fa;
+            }
+            .section{
+                margin: 0 20px;
+            }
+            .list_points li{
+                margin: 15px 0;
+            }
+            .functionality_container{
+                margin:15px;
+            }
+            .example{
+                padding: 10px;
+                font-size: 85%;
+                background-color: #f6f8fa;
+                border-radius: 3px;
+            }
+            .example p{
+                margin-left: 10px;
+            }
+        </style>
     </head>
     <body>
-        <p>Welcome</p>
-        <div id="words"></div>   
+        <div class="container">
+            <div class="section">
+                <h1>Dream Dictionary Bot</h1>
+                <hr>
+                <p>This is a telegram bot that allows you to search for interpretations of specific key words in your dream. It draws all its knowledge from a dream dictionary written originally by Mr Tella Olayeri. I advice you <a href="https://www.amazon.com/Dictionary-Dreams-Tella-Olayeri/dp/B0053B58RQ">buy the book</a></p>
+                <br>
+            </div>
+            
+            <div class="section">
+                <h1>Prerequisites</h1>
+                <hr>
+                <ul class="list_points">
+                    <li>To use this bot certianly you need to have a telegram account</li>
+                    <li>Then you need to <a href="http://telegram.me/dream_dictionary_bot">start using</a> the bot on telegram right away)</li>
+                </ul>
+                <br>  
+            </div>
+            
+             
+            <div class="section">
+                <h1>Getting Started</h1>
+                <hr>
+                <p>In the current version of this bot, here are the features that are available to you:</p>
+                <div class="functionality_container">
+                        <p class="functionality_title"><strong>/findbyword:</strong> This command allows you find words in the dictionary alongside its page. Here is an example of how you use it:</p>
+                        <div class="example">
+                            <p><strong>/findbyword</strong> (the_word_you_want)</p> 
+                            <p><strong>/findbyword</strong> flowers</p>                           
+                        </div>
+                        
+                        <p>The result will look like this:</p>
+                        <div class="example">
+                                <p>Hurray, the word Flowers was found in page 392.</p>                         
+                        </div>
+                </div>
+        
+                <div class="functionality_container">
+                    <p class="functionality_title"><strong>/findbyalphabet:</strong> This command allows you to see all the words in the dream dictionary and its pages. Here is how to use it:</p>
+                    
+                    <div class="example">
+                        <p><strong>/findbyalphabet</strong> (the_alphabet_you_want)</p> 
+                        <p><strong>/findbyalphabet</strong> x</p>                           
+                    </div>
+                    <p>The result will look like this:</p>
+    
+                    <div class="example">
+                        <p>Here You Go (Your_name)</p>
+                        <p>Zebra => 825</p>
+                        <p>Zero => 825</p>
+                        <p>Zinc => 825</p>
+                        <p>Zion => 825</p>
+                        <p>Zipper => 825</p>
+                        <p>Zircon => 825</p>
+                        <p>Zither => 826</p>
+                        <p>Zoo => 823-824/826</p>
+                    </div>
+                </div>
+                    
+                <div class="functionality_container">
+                    <p class="functionality_title"><strong>/help:</strong> This shows you basically every comand you can use in the bot and a contact information for clarifications and suggestions. Just type /help like this:</p>
+                
+                    <div class="example">
+                        <p><strong>/help</strong></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h1>Versions</h1>
+                <hr>  
+                <p>This is version 1.0.0 future versions will be released soon</p>
+            </div>
+            
+            <div class="section">
+                <h1>Future</h1>
+                <hr>         
+                <p>Very soon there are more versions coming out, like:</p>
+                <ul class="list_points">
+                    <li>Finding the exact interpretation of the word you are looking for</li>
+                    <li>Finding synonyms to a word you are looking for to make it easy for you to find interpretations in the dictionary</li>
+                    <li>A spell checker that helps you correct your spelling which assists you in finding words accurately </li>
+                </ul>
+            </div>
+        </div>
     </body>
 </html>
