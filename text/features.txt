@@ -19,4 +19,10 @@ In the coming version you can be able to find the interpretaions directly from t
 
 Have any question? Ask my creator https://t.me/Lover_Of_Jesus
 
-To get started *click the backslash* on the _bottom right of the screen_ ( it looks like this [/] ).\nThere you would see the list of commands available for you to use.\nClick on /help to see examples of how to use me. 
+To get started *click the backslash* on the _bottom right of the screen_ ( it looks like this [/] ).\nThere you would see the list of commands available for you to use.\nClick on /help to see examples of how to use me.
+
+
+About
+I can help you get the meaning of your dreams. 
+Made by @Lover_of_Jesus
+Learn more: https://github.com/Rotimi-Best/dream-dictionary-bot/blob/master/README.md

@@ -20,3 +20,12 @@ letters.forEach(function(val,index, array){
 })
 
 // Server https://glitch.com/edit/#!/dream-dictionary?path=server.js:1:0
+
+/* Commands 
+
+findbyword - Find page & interpretation of any word in dictionary
+findbyalphabet - See all words under an alphabet
+spellchecker - I can check & suggest spellings 4 u
+help - See all i can do
+
+*/
