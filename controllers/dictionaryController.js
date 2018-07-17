@@ -3,8 +3,16 @@
 const Telegram = require('telegram-node-bot');
 const TelegramBaseController = Telegram.TelegramBaseController
 
-const lib = require('../text/libArray')
-const fs = require('fs')
+const lib = require('../text/libArray');
+const fs = require('fs');
+const nodehun = require('nodehun');
+const path = require('path')
+const usBase = require.resolve('dictionary-en-us')
+
+let dictbuf = fs.readFileSync(path.join(usBase, 'index.dic'), 'utf-8')
+let affbuf = fs.readFileSync(path.join(usBase, 'index.aff'), 'utf-8')
+
+let dict = new nodehun(affbuf,dictbuf);
 
 class DictionaryController extends TelegramBaseController
 {
