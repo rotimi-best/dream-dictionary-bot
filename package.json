@@ -15,7 +15,6 @@
   "dependencies": {
     "dictionary-en-us": "^2.0.0",
     "dotenv": "^6.0.0",
-    "nodehun": "^2.0.12",
     "telegram-node-bot": "^4.0.5"
   }
 }
