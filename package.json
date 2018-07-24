@@ -10,7 +10,8 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Rotimi-Best/dream-dictionary-bot"
+    "url": "https://github.com/Rotimi-Best/dream-dictionary-bot",
+    "username": "Rotimi-Best"
   },
   "dependencies": {
     "dictionary-en-us": "^2.0.0",
