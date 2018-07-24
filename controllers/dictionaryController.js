@@ -15,7 +15,7 @@ class DictionaryController extends TelegramBaseController
         let user = $.message.chat.firstName
         let word = $.message.text.split(' ').slice(1).join(' ')
 
-        if(word.length === 1 && word.match(/[a-z]/i)){
+        if(word.length > 1 && word.match(/[a-z]/i)){
             //Logic to suggest
             let spellChecker = (err, dict) => {
                 if(err) {
@@ -26,7 +26,7 @@ class DictionaryController extends TelegramBaseController
 
                 if(correct){
                     //Your value is correct
-                    $.sendMessage(`Hey ${user}, your spelling is correct, go ahead and try finding the word in the dictionary by doing this:\n /findbyword ${word}`, {parse_mode: 'Markdown'})
+                    $.sendMessage(`Hey ${user}, your spelling is correct, go ahead and find the meaning by just typing:/findbyword ${word}`, {parse_mode: 'Markdown'})
                 } else {
                     let suggestions = spellObj.suggest(word)
                     if(suggestions === Array){
