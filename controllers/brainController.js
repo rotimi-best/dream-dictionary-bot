@@ -100,7 +100,7 @@ class BrainController extends TelegramBaseController{
     }
 
     _serializeList(user, words, pages) {
-        let serialized = `*HERE YOU GO ${user}*\n`;
+        let serialized = `*Here You Go ${user}*\n`;
         words.forEach((word, index) => {
             serialized +=  `${word.charAt(0).toUpperCase() + word.slice(1)} => ${pages[index]}\n`
         })

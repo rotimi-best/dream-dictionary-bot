@@ -3,16 +3,8 @@
 const Telegram = require('telegram-node-bot');
 const TelegramBaseController = Telegram.TelegramBaseController
 
-const lib = require('../text/libArray');
-const fs = require('fs');
-const nodehun = require('nodehun');
-const path = require('path')
-const usBase = require.resolve('dictionary-en-us')
-
-let dictbuf = fs.readFileSync(path.join(usBase, 'index.dic'), 'utf-8')
-let affbuf = fs.readFileSync(path.join(usBase, 'index.aff'), 'utf-8')
-
-let dict = new nodehun(affbuf,dictbuf);
+const dictionary = require('dictionary-en-us')
+const nspell = require('nspell')
 
 class DictionaryController extends TelegramBaseController
 {
@@ -21,15 +13,52 @@ class DictionaryController extends TelegramBaseController
      */
     spellCheckerHandler($) {
         let user = $.message.chat.firstName
-        let val = $.message.text.split(' ').slice(1).join(' ')
+        let word = $.message.text.split(' ').slice(1).join(' ')
 
-        $.sendMessage(`For now this functionality is still in production, in few days it should be ready. Thank you`, { parse_mode: "Markdown"})
+        if(word.length === 1 && word.match(/[a-z]/i)){
+            //Logic to suggest
+            let spellChecker = (err, dict) => {
+                if(err) {
+                    throw err
+                }
+                const spellObj = nspell(dict)
+                let correct = spellObj.correct(word);
+
+                if(correct){
+                    //Your value is correct
+                    $.sendMessage(`Hey ${user}, your spelling is correct, go ahead and try finding the word in the dictionary by doing this:\n /findbyword ${word}`, {parse_mode: 'Markdown'})
+                } else {
+                    let suggestions = spellObj.suggest(word)
+                    if(suggestions === Array){
+                        $.sendMessage(this._serializeList(user, word, suggestions), {parse_mode: 'Markdown'})
+                    } else{
+                        $.sendMessage(`Hey ${user}, the word ${word} is incorrect. I got a suggestion for you:\n${suggestions[0]}.\nTo find the meaning just type: /findbyword ${suggestions[0]}`, {parse_mode: 'Markdown'})
+                    }
+                    
+    
+                }
+            }
+            dictionary(spellChecker)
+        } else{
+            //Sorry your word is invalid
+            $.sendMessage(`Sorry your input is invalid, make sure you typed in english and its not a number.`, { parse_mode: "Markdown"})
+        }
+        // $.sendMessage(`For now this functionality is still in production, in few days it should be ready. Thank you`, { parse_mode: "Markdown"})
     }
 
     get routes() {
         return {
             'spellCheckerCommand' : 'spellCheckerHandler',
         }
+    }
+
+    _serializeList(user, word, suggestions) {
+        let serialized = `*Hey ${user}, the word ${word} is incorrect. I got some suggestions for you:*\n\n`;
+        suggestions.forEach((suggestion) => {
+            serialized +=  `${suggestion.charAt(0).toUpperCase() + suggestion.slice(1)}\n`
+        })
+        serialized +=  `\nTo find the meaning of any of the word just type: /findbyword ${suggestions[0].charAt(0).toUpperCase()}`
+        return serialized;
     }
 }
 

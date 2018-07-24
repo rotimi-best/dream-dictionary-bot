@@ -4,7 +4,7 @@
   "description": "interpret dreams",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node index.js"
   },
   "author": "Ibitoye Best",
   "license": "ISC",
@@ -15,6 +15,7 @@
   "dependencies": {
     "dictionary-en-us": "^2.0.0",
     "dotenv": "^6.0.0",
+    "nspell": "^2.1.0",
     "telegram-node-bot": "^4.0.5"
   }
 }
