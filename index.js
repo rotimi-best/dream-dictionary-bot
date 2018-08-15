@@ -7,7 +7,7 @@ const TextCommand = Telegram.TextCommand
 const bot = new Telegram.Telegram(process.env.API_KEY, {
     workers: 1
 });
-
+module.exports = bot;
 const OtherwiseController = require('./controllers/otherwiseController')
 const BrainController = require('./controllers/brainController')
 const DictionaryController = require('./controllers/dictionaryController')

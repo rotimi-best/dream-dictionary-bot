@@ -5,6 +5,8 @@ const TelegramBaseController = Telegram.TelegramBaseController
 
 const lib = require('../text/libArray')
 const fs = require('fs')
+const telegramBot = require('../index.js')
+const myChatId = '380473669';
 
 class BrainController extends TelegramBaseController{
     /**
@@ -12,8 +14,10 @@ class BrainController extends TelegramBaseController{
      */
     wordSearchHandler($) {
         // $.sendMessage('I am here to help you.')
-        let user = $.message.chat.firstName
-        let val = $.message.text.split(' ').slice(1).join(' ')
+        let user = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
+        let userId = $.message.chat.id;
+        let msg = $.message.text;
+        let val = msg.split(' ').slice(1).join(' ');
         if(val != ''){
             let input = val.trim().replace(/ /g, '');
             let found = false
@@ -37,14 +41,18 @@ class BrainController extends TelegramBaseController{
                 });
                 if(found){		
                     $.sendMessage(`Hurray, the word ${matched.charAt(0).toUpperCase() + matched.slice(1)} was found in page ${page}`)
+                    telegramBot.api.sendMessage(myChatId, `User ${user} is using the wordSearchHandler`)
                 } else {
+                    telegramBot.api.sendMessage(myChatId, `Error =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
                     $.sendMessage(`Sorry ${user}, ${input} wasn't found, try adding/removing (s) at the end of the word or try using the /spellchecker command to correct your spelling.\nLike this: /spellchecker ${input}`)
                 }
-            }else {
+            } else {
                 $.sendMessage(`Sorry ${user}, your input isn't valid. Make sure you entered an english word`)
+                telegramBot.api.sendMessage(myChatId, `Error =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
               }
         } else {
             $.sendMessage(`Sorry ${user}, your input isn't valid. click /help for more info.`)
+            telegramBot.api.sendMessage(myChatId, `Error =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
         }
     }
 
@@ -52,9 +60,10 @@ class BrainController extends TelegramBaseController{
      * @param {Scope} $
      */
     alphSearchHandler($) {
-        let user = $.message.chat.firstName
-        let val = $.message.text.split(' ').slice(1).join(' ')
-
+        let user = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
+        let userId = $.message.chat.id;
+        let msg = $.message.text;
+        let val = msg.split(' ').slice(1).join(' ')
         if(val){
             let input = val.trim()
             let checker = false
@@ -64,15 +73,17 @@ class BrainController extends TelegramBaseController{
                     let words = element.container.words
                     let pages = element.container.pages
                     checker = true
-                    $.sendMessage(this._serializeList(user, words, pages), {parse_mode: 'Markdown'})                  
-
+                    $.sendMessage(this._serializeList(user, words, pages), {parse_mode: 'Markdown'})
+                    telegramBot.api.sendMessage(myChatId, `User ${user} used the alphabetSearchHandler`)                  
                 } 
             });
             if(!checker){
-                $.sendMessage(`Sorry ${user}, Such alphabet doesn\'t exist, check your spelling`)
+                $.sendMessage(`Sorry ${user}, Such alphabet doesn't exist, check your spelling`)
+                telegramBot.api.sendMessage(myChatId, `Error =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
             }
         } else {
             $.sendMessage(`Sorry ${user}, your input isn't valid. click /help for more info.`)
+            telegramBot.api.sendMessage(myChatId, `Error =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
         }
     }
 
@@ -81,6 +92,9 @@ class BrainController extends TelegramBaseController{
      */
     helpHandler($) {
         $.sendMessage(`To use my current version you need to have bought the book.\nhttps://www.amazon.com/Dictionary-Dreams-Tella-Olayeri/dp/B0053B58RQ\nIn my current version here is what I can do:\n\n1. You can check if a word is in the dictionary and find its page. To do this use /findbyword command and then the word \ne.g /findbyword football. \n\n2. Show you all the words in a particular alphabet. To do this use /findbyalphabet command followed by the alphabet \ne.g /findbyalphabet p \n\n*NOTE:*Click the backslash (right side of your text input area), and pressdown the command you want before you type a word (don't click on the command, if you do it will send immediately).\n\n  In the coming version you can be able to find the interpretaions directly from the bot without the dream dictionary.\n\nHave any question? Ask my [creator](https://t.me/Lover_Of_Jesus)`, { parse_mode: "Markdown"})
+        let user = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
+        let userId = $.message.chat.id;
+        telegramBot.api.sendMessage(myChatId, `Someone needs help.\nUsername: ${user}\nUserId: ${userId}`)
     }
 
     /**
@@ -88,6 +102,9 @@ class BrainController extends TelegramBaseController{
      */
     startHandler($) {
         $.sendMessage(`To get started *click the backslash* on the _top right of your keyboard_ ( it looks like this / ).\nThere you would see the list of commands available for you to use.\nClick on /help to see examples of how to use those commands.`, { parse_mode: "Markdown"})
+        let user = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
+        let userId = $.message.chat.id;
+        telegramBot.api.sendMessage(myChatId, `You have a new user.\n\nUsername: ${user}\nUserId: ${userId}`)
     }
 
     get routes() {
