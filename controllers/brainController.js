@@ -19,7 +19,8 @@ class BrainController extends TelegramBaseController{
             let found = false
             let matched, page
             let firstLetter = input.match(/\w/);
-            if(firstLetter){
+
+             if(firstLetter){
                 lib.arr.forEach((element) => {
                     let alphabet = element.container.alph
                     if(alphabet == firstLetter['0']){
@@ -35,8 +36,17 @@ class BrainController extends TelegramBaseController{
                         })
                     }	
                 });
-                if(found){		
-                    $.sendMessage(`Hurray, the word ${matched.charAt(0).toUpperCase() + matched.slice(1)} was found in page ${page}`)
+                if(found){
+                    let imagesFile = fs.readFileSync('images.json', 'utf8');
+                    let jsonImages = JSON.parse(imagesFile);
+                    let image = jsonImages.images[page];
+                    try{
+                        $.sendPhoto(image);
+                    } catch(error){
+                        
+                    }
+                    
+                    //$.sendMessage(`Hurray, the word ${matched.charAt(0).toUpperCase() + matched.slice(1)} was found in page ${page}`)
                 } else {
                     $.sendMessage(`Sorry ${user}, ${input} wasn't found, try adding/removing (s) at the end of the word or try using the /spellchecker command to correct your spelling.\nLike this: /spellchecker ${input}`)
                 }
