@@ -48,22 +48,22 @@ class BrainController extends TelegramBaseController{
                         $.sendMessage(`Hurray, the word ${matched.charAt(0).toUpperCase() + matched.slice(1)} was found in page ${page}`)
                         $.sendPhoto(image);
                     } catch(error){
-                        telegramBot.api.sendMessage(myChatId, `User ${user} has an error with sending images`)
+                        telegramBot.api.sendMessage(myChatId, `ImageSendError[/findbyWord] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}\nPage: ${page}`)
                         telegramBot.api.sendMessage(myChatId, `Error message ${error}`)
                     }
                     
                     //$.sendMessage(`Hurray, the word ${matched.charAt(0).toUpperCase() + matched.slice(1)} was found in page ${page}`)		
                 } else {
-                    telegramBot.api.sendMessage(myChatId, `Error =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
+                    telegramBot.api.sendMessage(myChatId, `NotFoundError[/findbyWord] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
                     $.sendMessage(`Sorry ${user}, ${input} wasn't found, try adding/removing (s) at the end of the word or try using the /spellchecker command to correct your spelling.\nLike this: /spellchecker ${input}`)
                 }
             } else {
                 $.sendMessage(`Sorry ${user}, your input isn't valid. Make sure you entered an english word`)
-                telegramBot.api.sendMessage(myChatId, `Error =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
+                telegramBot.api.sendMessage(myChatId, `NotEnglishError =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
               }
         } else {
             $.sendMessage(`Sorry ${user}, your input isn't valid. click /help for more info.`)
-            telegramBot.api.sendMessage(myChatId, `Error =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
+            telegramBot.api.sendMessage(myChatId, `InvalidInputError[/findbyWord] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
         }
     }
 
@@ -90,11 +90,11 @@ class BrainController extends TelegramBaseController{
             });
             if(!checker){
                 $.sendMessage(`Sorry ${user}, Such alphabet doesn't exist, check your spelling`)
-                telegramBot.api.sendMessage(myChatId, `Error =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
+                telegramBot.api.sendMessage(myChatId, `NotFoundError[/findbyalpahbet] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
             }
         } else {
             $.sendMessage(`Sorry ${user}, your input isn't valid. click /help for more info.`)
-            telegramBot.api.sendMessage(myChatId, `Error =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
+            telegramBot.api.sendMessage(myChatId, `InvalidInputError[/findbyalpahbet] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
         }
     }
 

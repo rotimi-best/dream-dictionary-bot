@@ -45,7 +45,7 @@ class DictionaryController extends TelegramBaseController
         } else{
             //Sorry your word is invalid
             $.sendMessage(`Sorry your input is invalid, make sure you typed in english and its not a number.`, { parse_mode: "Markdown"})
-            telegramBot.api.sendMessage(myChatId, `Error =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
+            telegramBot.api.sendMessage(myChatId, `InvalidInputError[/spellchecker] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
         }
         // $.sendMessage(`For now this functionality is still in production, in few days it should be ready. Thank you`, { parse_mode: "Markdown"})
     }
