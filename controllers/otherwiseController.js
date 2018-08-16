@@ -4,6 +4,8 @@ const Telegram = require('telegram-node-bot');
 const BaseController = Telegram.TelegramBaseController
 const telegramBot = require('../index.js')
 
+let coolGlasses = '😎'
+
 class OtherwiseController extends BaseController {
     /**
      * @param {Scope} $
@@ -13,7 +15,7 @@ class OtherwiseController extends BaseController {
         let firstName = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
         let msg = $.message.text ? $.message.text : 'Not a text';
         let userId = $.message.chat.id;
-        $.sendMessage('To search for a word, e.g Bag\n\nJust type this:\n/findbyword Bag\n\nClick /help to see all I can do')
+        $.sendMessage(`To search for a word, e.g Bag\n\nJust type this:\n/findbyword Bag\n\nClick /help to see all I can do ${coolGlasses}`)
         telegramBot.api.sendMessage(myChatId, `Error =>\nUsername: ${firstName}\nUserId: ${userId}\nInput: ${msg}`)
     }
 }

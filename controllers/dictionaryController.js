@@ -8,6 +8,10 @@ const nspell = require('nspell');
 const telegramBot = require('../index.js');
 const myChatId = '380473669';
 
+let smile = '🙂';
+let sad = '😞';
+let coolGlasses = '😎'
+
 class DictionaryController extends TelegramBaseController
 {
     /**
@@ -21,27 +25,15 @@ class DictionaryController extends TelegramBaseController
 
         if(word.length > 1 && word.match(/[a-z]/i)){
             //Logic to suggest
-            let spellChecker = (err, dict) => {
-                if(err) {
-                    throw err
-                }
-                const spellObj = nspell(dict)
-                let correct = spellObj.correct(word);
+            this.spellCheckerLogic($, word, user, userId, msg);
+        } else if(msg == '/spellchecker'){
+            $.sendMessage(`*Send me the word you want to check its spelling.*\n\nI am waiting...${smile}`, {parse_mode: 'Markdown'});
+            $.waitForRequest
+                .then($ => {
+                    word = $.message.text;
+                    this.spellCheckerLogic($, word, user)
+                })
 
-                if(correct){
-                    //Your value is correct
-                    $.sendMessage(`Hey ${user}, your spelling is correct, go ahead and find the meaning by just typing:/findbyword ${word}`, {parse_mode: 'Markdown'})
-                    telegramBot.api.sendMessage(myChatId, `User ${user} is using the spellCheckerHandler, but no suggestion for word: ${word}`);
-                } else {
-                    let suggestions = spellObj.suggest(word)
-                    if(suggestions === Array){
-                        $.sendMessage(this._serializeList(user, word, suggestions), {parse_mode: 'Markdown'})
-                    } else{
-                        $.sendMessage(`Hey ${user}, the word ${word} is incorrect. I got a suggestion for you:\n${suggestions[0]}.\nTo find the meaning just type: /findbyword ${suggestions[0]}`, {parse_mode: 'Markdown'})
-                    }
-                }
-            }
-            dictionary(spellChecker)
         } else{
             //Sorry your word is invalid
             $.sendMessage(`Sorry your input is invalid, make sure you typed in english and its not a number.`, { parse_mode: "Markdown"})
@@ -56,8 +48,32 @@ class DictionaryController extends TelegramBaseController
         }
     }
 
+    spellCheckerLogic($, word, user) {
+        let spellChecker = (err, dict) => {
+        if(err) {
+            throw err
+        }
+        const spellObj = nspell(dict)
+        let correct = spellObj.correct(word);
+
+        if(correct){
+            //Your value is correct
+            $.sendMessage(`Hey ${user}, your spelling is correct ${smile}, go ahead and find the meaning by just typing:\n\n/findbyword ${word}`, {parse_mode: 'Markdown'})
+            telegramBot.api.sendMessage(myChatId, `User ${user} is using the spellCheckerHandler, but no suggestion for word: ${word}`);
+        } else {
+            let suggestions = spellObj.suggest(word)
+            if(suggestions === Array){
+                $.sendMessage(this._serializeList(user, word, suggestions), {parse_mode: 'Markdown'})
+            } else{
+                $.sendMessage(`Hey ${user}, the word ${word} is incorrect ${sad}. I got a suggestion${coolGlasses} for you:\n${suggestions[0]}.\nTo find the meaning just type: /findbyword ${suggestions[0]}`, {parse_mode: 'Markdown'})
+            }
+        }
+        }
+        dictionary(spellChecker)
+    }
+
     _serializeList(user, word, suggestions) {
-        let serialized = `*Hey ${user}, the word ${word} is incorrect. I got some suggestions for you:*\n\n`;
+        let serialized = `*Hey ${user}, the word ${word} is incorrect ${sad}. I got some suggestions for you:* ${coolGlasses}\n\n`;
         suggestions.forEach((suggestion) => {
             serialized +=  `${suggestion.charAt(0).toUpperCase() + suggestion.slice(1)}\n`
         })
