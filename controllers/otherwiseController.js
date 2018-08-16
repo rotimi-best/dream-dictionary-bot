@@ -13,7 +13,7 @@ class OtherwiseController extends BaseController {
         let firstName = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
         let msg = $.message.text ? $.message.text : 'Not a text';
         let userId = $.message.chat.id;
-        $.sendMessage('Sorry, I don\'t understand, check out my full capacity /help ))')
+        $.sendMessage('To search for a word, e.g Bag\n\nJust type this:\n/findbyword Bag\n\nClick /help to see all I can do')
         telegramBot.api.sendMessage(myChatId, `Error =>\nUsername: ${firstName}\nUserId: ${userId}\nInput: ${msg}`)
     }
 }

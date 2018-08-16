@@ -55,7 +55,7 @@ class BrainController extends TelegramBaseController{
                     //$.sendMessage(`Hurray, the word ${matched.charAt(0).toUpperCase() + matched.slice(1)} was found in page ${page}`)		
                 } else {
                     telegramBot.api.sendMessage(myChatId, `NotFoundError[/findbyWord] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
-                    $.sendMessage(`Sorry ${user}, ${input} wasn't found, try adding/removing (s) at the end of the word or try using the /spellchecker command to correct your spelling.\nLike this: /spellchecker ${input}`)
+                    $.sendMessage(`Sorry ${user}, ${input} wasn't found, try adding/removing (s) at the end of the word or try using the /spellchecker command to correct your spelling.\n\nLike this: /spellchecker ${input}`)
                 }
             } else {
                 $.sendMessage(`Sorry ${user}, your input isn't valid. Make sure you entered an english word`)
