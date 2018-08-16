@@ -27,7 +27,7 @@ class BrainController extends TelegramBaseController{
              if(firstLetter){
                 lib.arr.forEach((element) => {
                     let alphabet = element.container.alph
-                    if(alphabet == firstLetter['0']){
+                    if(alphabet == firstLetter['0'].toLowerCase()){
                         let words = element.container.words
                         words.forEach((el, index) => {
                             let reg = new RegExp('\\b' + input + '\\b', 'gi')
