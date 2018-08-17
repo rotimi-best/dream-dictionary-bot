@@ -55,7 +55,7 @@ class BrainController extends TelegramBaseController{
             $.runInlineMenu({
                 layout: 4,
                 method: 'sendMessage',
-                params: ['Choose an alphabet to see all the words you can search for'],
+                params: ['Please select an alphabet below:'],
                 menu: [
                     { text:'A', callback: () => {this.findAlphabetLogic(scope, 'A', msg, user, userId)} },
                     { text:'B', callback: () => {this.findAlphabetLogic(scope, 'B', msg, user, userId)} },  
