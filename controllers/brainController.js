@@ -26,7 +26,7 @@ class BrainController extends TelegramBaseController{
         let val = msg.split(' ').slice(1).join(' ');
         if(msg == '/findbyword'){
             $.sendMessage(`*Send me the word you want to lookup.*\n\nI am waiting...${smile}`, {parse_mode: 'Markdown'});
-            $.sendSticker(`${waitingSticker}`);
+            //$.sendSticker(`${waitingSticker}`);
             $.waitForRequest
                 .then($ => {
                     val = $.message.text;
