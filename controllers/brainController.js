@@ -11,6 +11,7 @@ const myChatId = '380473669';
 let success = '🕺';
 let smile = '🙂';
 let sad = '😞';
+let coolGlasses = '😎'
 
 class BrainController extends TelegramBaseController{
     /**
@@ -120,16 +121,22 @@ class BrainController extends TelegramBaseController{
                 }	
             });
             if(found){
+                $.sendMessage(`Hurray ${success}, the word ${matched.charAt(0).toUpperCase() + matched.slice(1)} was found in page ${page}`)
+                telegramBot.api.sendMessage(myChatId, `User ${user} used the wordSearchHandler`) 
                 let imagesFile = fs.readFileSync('images.json', 'utf8');
                 let jsonImages = JSON.parse(imagesFile);
                 let image = jsonImages.images[page];
-                $.sendMessage(`Hurray ${success}, the word ${matched.charAt(0).toUpperCase() + matched.slice(1)} was found in page ${page}`)
-                telegramBot.api.sendMessage(myChatId, `User ${user} used the wordSearchHandler`) 
+                if(image){
                 const send = $.sendPhoto(image);
                 send.catch((error) => {
+                    $.sendMessage(`Unfortunately ${user} ${sad}, no image for ${matched.charAt(0).toUpperCase() + matched.slice(1)} yet. It would be available soon${coolGlasses}`);
                     telegramBot.api.sendMessage(myChatId, `ImageSendError[/findbyWord] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}\nPage: ${page}`)
                     telegramBot.api.sendMessage(myChatId, `Description => ${error.description}`)
                 });
+               } else {
+                    $.sendMessage(`Unfortunately ${user} ${sad}, no image for ${matched.charAt(0).toUpperCase() + matched.slice(1)} yet. It would be available soon${coolGlasses}`);
+                    telegramBot.api.sendMessage(myChatId, `ImageSendError[/findbyWord] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}\nPage: ${page}\nDescription => Cannot read property 'url' of undefined`);
+               }
             
                 //$.sendMessage(`Hurray, the word ${matched.charAt(0).toUpperCase() + matched.slice(1)} was found in page ${page}`)		
             } else {
