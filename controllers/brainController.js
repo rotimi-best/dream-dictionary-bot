@@ -12,6 +12,7 @@ let success = '🕺';
 let smile = '🙂';
 let sad = '😞';
 let coolGlasses = '😎'
+let waitingSticker = 'CAADAgADPQgAAnlc4gkSO7rndkwKigI';
 
 class BrainController extends TelegramBaseController{
     /**
@@ -25,6 +26,7 @@ class BrainController extends TelegramBaseController{
         let val = msg.split(' ').slice(1).join(' ');
         if(msg == '/findbyword'){
             $.sendMessage(`*Send me the word you want to lookup.*\n\nI am waiting...${smile}`, {parse_mode: 'Markdown'});
+            $.sendSticker(`${waitingSticker}`);
             $.waitForRequest
                 .then($ => {
                     val = $.message.text;
@@ -49,12 +51,40 @@ class BrainController extends TelegramBaseController{
         if(val){
             this.findAlphabetLogic($, val, msg, user, userId)
         } else if(msg == '/findbyalphabet') {
-            $.sendMessage(`*Send me an alphabet you want to lookup.*\n\nI am waiting...${smile}`, {parse_mode: 'Markdown'});
-            $.waitForRequest
-                .then($ => {
-                    val = $.message.text;
-                    this.findAlphabetLogic($, val, msg, user, userId)
-                })
+            let scope = $;
+            $.runInlineMenu({
+                layout: 4,
+                method: 'sendMessage',
+                params: ['Choose an alphabet to see all the words you can search for'],
+                menu: [
+                    { text:'A', callback: () => {this.findAlphabetLogic(scope, 'A', msg, user, userId)} },
+                    { text:'B', callback: () => {this.findAlphabetLogic(scope, 'B', msg, user, userId)} },  
+                    { text:'C', callback: () => {this.findAlphabetLogic(scope, 'C', msg, user, userId)} }, 
+                    { text:'D', callback: () => {this.findAlphabetLogic(scope, 'D', msg, user, userId)} }, 
+                    { text:'E', callback: () => {this.findAlphabetLogic(scope, 'E', msg, user, userId)} }, 
+                    { text:'F', callback: () => {this.findAlphabetLogic(scope, 'F', msg, user, userId)} }, 
+                    { text:'G', callback: () => {this.findAlphabetLogic(scope, 'G', msg, user, userId)} }, 
+                    { text:'H', callback: () => {this.findAlphabetLogic(scope, 'H', msg, user, userId)} }, 
+                    { text:'I', callback: () => {this.findAlphabetLogic(scope, 'I', msg, user, userId)} }, 
+                    { text:'J', callback: () => {this.findAlphabetLogic(scope, 'J', msg, user, userId)} }, 
+                    { text:'K', callback: () => {this.findAlphabetLogic(scope, 'K', msg, user, userId)} }, 
+                    { text:'L', callback: () => {this.findAlphabetLogic(scope, 'L', msg, user, userId)} }, 
+                    { text:'M', callback: () => {this.findAlphabetLogic(scope, 'M', msg, user, userId)} }, 
+                    { text:'N', callback: () => {this.findAlphabetLogic(scope, 'N', msg, user, userId)} }, 
+                    { text:'O', callback: () => {this.findAlphabetLogic(scope, 'O', msg, user, userId)} }, 
+                    { text:'P', callback: () => {this.findAlphabetLogic(scope, 'P', msg, user, userId)} }, 
+                    { text:'Q', callback: () => {this.findAlphabetLogic(scope, 'Q', msg, user, userId)} }, 
+                    { text:'R', callback: () => {this.findAlphabetLogic(scope, 'R', msg, user, userId)} }, 
+                    { text:'S', callback: () => {this.findAlphabetLogic(scope, 'S', msg, user, userId)} }, 
+                    { text:'T', callback: () => {this.findAlphabetLogic(scope, 'T', msg, user, userId)} },                          
+                    { text:'U', callback: () => {this.findAlphabetLogic(scope, 'U', msg, user, userId)} }, 
+                    { text:'V', callback: () => {this.findAlphabetLogic(scope, 'V', msg, user, userId)} }, 
+                    { text:'W', callback: () => {this.findAlphabetLogic(scope, 'W', msg, user, userId)} }, 
+                    { text:'X', callback: () => {this.findAlphabetLogic(scope, 'X', msg, user, userId)} }, 
+                    { text:'Y', callback: () => {this.findAlphabetLogic(scope, 'Y', msg, user, userId)} }, 
+                    { text:'Z', callback: () => {this.findAlphabetLogic(scope, 'Z', msg, user, userId)} }, 
+                ]
+            });
         } else {
             $.sendMessage(`Sorry ${user} ${sad}, your input isn't valid. click /help for more info.`)
             telegramBot.api.sendMessage(myChatId, `InvalidInputError[/findbyalpahbet] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)

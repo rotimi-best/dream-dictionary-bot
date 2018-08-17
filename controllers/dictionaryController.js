@@ -11,6 +11,7 @@ const myChatId = '380473669';
 let smile = '🙂';
 let sad = '😞';
 let coolGlasses = '😎'
+let waitingSticker = 'CAADAgADPQgAAnlc4gkSO7rndkwKigI';
 
 class DictionaryController extends TelegramBaseController
 {
@@ -28,6 +29,7 @@ class DictionaryController extends TelegramBaseController
             this.spellCheckerLogic($, word, user, userId, msg);
         } else if(msg == '/spellchecker'){
             $.sendMessage(`*Send me the word you want to check its spelling.*\n\nI am waiting...${smile}`, {parse_mode: 'Markdown'});
+            $.sendSticker(`${waitingSticker}`);
             $.waitForRequest
                 .then($ => {
                     word = $.message.text;

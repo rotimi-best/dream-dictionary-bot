@@ -5,7 +5,11 @@ const Telegram = require('telegram-node-bot')
 require('dotenv').config();
 const TextCommand = Telegram.TextCommand
 const bot = new Telegram.Telegram(process.env.API_KEY, {
-    workers: 1
+    workers: 1,
+    webAdmin: {
+        port: 7778,
+        host: 'localhost'
+    }
 });
 module.exports = bot;
 const OtherwiseController = require('./controllers/otherwiseController')
