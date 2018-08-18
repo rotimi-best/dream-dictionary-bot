@@ -158,7 +158,7 @@ class BrainController extends TelegramBaseController{
             if(found){
                 $.sendMessage(`Hurray ${success}, the word ${matched.charAt(0).toUpperCase() + matched.slice(1)} was found in page ${page}`)
                 telegramBot.api.sendMessage(myChatId, `User ${user} used the wordSearchHandler`) 
-                let imagesFile = fs.readFileSync('images.json', 'utf8');
+                let imagesFile = fs.readFileSync('variables/images.json', 'utf8');
                 let jsonImages = JSON.parse(imagesFile);
                 let image = jsonImages.images[page];
                 if(image){

@@ -7,8 +7,8 @@ const TextCommand = Telegram.TextCommand
 const bot = new Telegram.Telegram(process.env.API_KEY, {
     workers: 1,
     webAdmin: {
-        port: 7778,
-        host: 'localhost'
+        port: 8081,
+        host: '127.0.0.1'
     }
 });
 module.exports = bot;
