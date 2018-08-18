@@ -72,10 +72,10 @@ class DictionaryController extends TelegramBaseController
             let suggestions = spellObj.suggest(word)
             if(Array.isArray(suggestions) && suggestions.length > 1){
                 $.sendMessage(this._serializeList(user, word, suggestions), {parse_mode: 'Markdown'})
-              telegramBot.api.sendMessage(myChatId, `User ${user} just used the spellChecker`) 
+              telegramBot.api.sendMessage(myChatId, `User ${user} just used the spellChecker for the word ${word}`) 
             } else if( Array.isArray(suggestions) && suggestions.length === 1){
                 $.sendMessage(`Hey ${user}, ${word} is incorrect ${sad}. I got a suggestion${oneEye} for you:\n\n${suggestions[0]}.\n\nTo find the meaning just type: /findbyword ${suggestions[0]}`, {parse_mode: 'Markdown'})
-                telegramBot.api.sendMessage(myChatId, `User ${user} used the spellChecker`) 
+                telegramBot.api.sendMessage(myChatId, `User ${user} used the spellChecker for the word ${word}`) 
             } else{
               $.sendMessage(`Unfortunately ${user}, that word isn't correct and I don't have any suggestion for you ${sad}.\n\nSince you are human you can correct it yourself${oneEye}. \n`)
               telegramBot.api.sendMessage(myChatId, `InvalidInputError[/spellchecker] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${suggestions}`);
@@ -86,7 +86,7 @@ class DictionaryController extends TelegramBaseController
     }
 
     _serializeList(user, word, suggestions) {
-        let serialized = `Hey ${user}, the word ${word} is incorrect ${sad}. I got some suggestions for you: ${oneEye}\n\n`;
+        let serialized = `Hey ${user}, the word ${word} is incorrect ${sad}. I've got some suggestions for you: ${oneEye}\n\n`;
         suggestions.forEach((suggestion) => {
             serialized +=  `${suggestion.charAt(0).toUpperCase() + suggestion.slice(1)}\n`
         })

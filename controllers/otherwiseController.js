@@ -5,6 +5,8 @@ const BaseController = Telegram.TelegramBaseController
 const telegramBot = require('../index.js')
 
 let coolGlasses = '😎'
+let oneEye = '😉';
+let fingerRight = '👉';
 
 class OtherwiseController extends BaseController {
     /**
@@ -15,8 +17,24 @@ class OtherwiseController extends BaseController {
         let firstName = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
         let msg = $.message.text ? $.message.text : 'Not a text';
         let userId = $.message.chat.id;
-        $.sendMessage(`To search for a word, e.g Bag\n\nJust type this:\n/findbyword Bag\n\nClick /help to see all I can do ${coolGlasses}`)
-        telegramBot.api.sendMessage(myChatId, `Error =>\nUsername: ${firstName}\nUserId: ${userId}\nInput: ${msg}`)
+        switch(msg) {
+            case '🔎 Search' :
+                $.sendMessage(`You can send me a key word from your dream and I will tell you its meaning ${oneEye}.\n\nPlease click this ${fingerRight} /findbyword to continue`);
+                break;
+            case '🔤 By Alphabet':
+                $.sendMessage(`I can tell you all available keywords that begins with an alphabet of your choice\n\nPlease click this ${fingerRight} /findbyalphabet to continue`);
+                break;
+            case '🔠 Spell Checker':
+                $.sendMessage(`If you are not sure of your spelling, I can correct it${coolGlasses}\n\nPlease click this ${fingerRight} /spellchecker to continue`);    
+                break;
+            case '🔑 Help':
+                $.sendMessage(`You need more explanation?\n\nPlease click this ${fingerRight} /help to continue`);
+                break;
+            default:
+                $.sendMessage(`To search for a word, e.g Bag\n\nJust type this:\n/findbyword Bag\n\nClick /help to see all I can do ${coolGlasses}`)
+                telegramBot.api.sendMessage(myChatId, `Error =>\nUsername: ${firstName}\nUserId: ${userId}\nInput: ${msg}`)
+        }
+        
     }
 }
 

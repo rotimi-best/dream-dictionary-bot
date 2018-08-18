@@ -8,11 +8,24 @@ const fs = require('fs')
 const telegramBot = require('../index.js')
 const myChatId = '380473669';
 
-let success = '🕺';
-let smile = '🙂';
-let sad = '😞';
-let coolGlasses = '😎'
-let waitingSticker = 'CAADAgADPQgAAnlc4gkSO7rndkwKigI';
+const emojis = {
+    'success' : '🕺',
+    'smile' : '🙂',
+    'sad' : '😞',
+    'coolGlasses' : '😎',
+    'oneEye' : '😉',
+    'spellChecker' : '🔠',
+    'help' : '🔑',
+    'byAlphabet' : '🔤',
+    'search' : '🔎',
+    'synonym' : '💡',
+    'chat' : '🗣👂',
+    'fingerRight' : '👉'
+};
+
+const stickers = {
+    'waitingSticker' : 'CAADAgADPQgAAnlc4gkSO7rndkwKigI'
+}
 
 class BrainController extends TelegramBaseController{
     /**
@@ -25,7 +38,7 @@ class BrainController extends TelegramBaseController{
         let msg = $.message.text;
         let val = msg.split(' ').slice(1).join(' ');
         if(msg == '/findbyword'){
-            $.sendMessage(`*Which word are you looking for?*\n\nSend me, I am waiting...${smile}`, {parse_mode: 'Markdown'});
+            $.sendMessage(`*Which *WORD* are you looking for?*\n\nSend me, I am waiting...${emojis.smile}`, {parse_mode: 'Markdown'});
             //$.sendSticker(`${waitingSticker}`);
             $.waitForRequest
                 .then($ => {
@@ -33,14 +46,14 @@ class BrainController extends TelegramBaseController{
                     if(val){
                         this.findWordLogic($, val, msg, user, userId)
                     } else {
-                        $.sendMessage(`Sorry ${user} ${sad}, your input isn't valid. click /help for more info.`)
+                        $.sendMessage(`Sorry ${user} ${emojis.emojis.sad}, your input isn't valid. click /help for more info.`)
                         telegramBot.api.sendMessage(myChatId, `InvalidInputError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: Invalid input`)
                     }
                 })
         } else if(val != '') {
             this.findWordLogic($, val, msg, user, userId)
         } else{
-            $.sendMessage(`Sorry ${user} ${sad}, your input isn't valid. click /help for more info.`)
+            $.sendMessage(`Sorry ${user} ${emojis.sad}, your input isn't valid. click /help for more info.`)
             telegramBot.api.sendMessage(myChatId, `InvalidInputError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
         }
     }
@@ -91,7 +104,7 @@ class BrainController extends TelegramBaseController{
                 ]
             });
         } else {
-            $.sendMessage(`Sorry ${user} ${sad}, your input isn't valid. click /help for more info.`)
+            $.sendMessage(`Sorry ${user} ${emojis.sad}, your input isn't valid. click /help for more info.`)
             telegramBot.api.sendMessage(myChatId, `InvalidInputError[/findbyalpahbet] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
         }
     }
@@ -110,7 +123,16 @@ class BrainController extends TelegramBaseController{
      * @param {Scope} $
      */
     startHandler($) {
-        $.sendMessage(`To get started *click the backslash* on the _top right of your keyboard_ ( it looks like this / ).\nThere you would see the list of commands available for you to use.\nClick on /help to see examples of how to use those commands.`, { parse_mode: "Markdown"})
+        $.runMenu({
+            message: 'Welcome, my goal is to help you interprete keywords in your dream.\n\nPick from the MENU below to get started:',
+            layout: 2,
+            oneTimeKeyboard : 'true',
+            '🔎 Search' : () => { $.sendMessage(`You can send me a key word from your dream and I will tell you its meaning ${emojis.oneEye}.\n\nPlease click this ${emojis.fingerRight} /findbyword to continue`); },
+            '🔤 By Alphabet' : () => { $.sendMessage(`I can tell you all available keywords that begins with an alphabet of your choice${emojis.oneEye}\n\nPlease click this ${emojis.fingerRight} /findbyalphabet to continue`); },
+            '🔠 Spell Checker' : () => { $.sendMessage(`If you are not sure of your spelling, I can correct it${emojis.coolGlasses}\n\nPlease click this ${emojis.fingerRight} /spellchecker to continue`); },
+            '🔑 Help' : () => { $.sendMessage(`You need more explanation?\n\nPlease click this ${emojis.fingerRight} /help to continue`); },            
+        })
+        //$.sendMessage(`To get started *click the backslash* on the _top right of your keyboard_ ( it looks like this / ).\nThere you would see the list of commands available for you to use.\nClick on /help to see examples of how to use those commands.`, { parse_mode: "Markdown"})
         let user = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
         let userId = $.message.chat.id;
         telegramBot.api.sendMessage(myChatId, `You have a new user.\n\nUsername: ${user}\nUserId: ${userId}`)
@@ -126,7 +148,7 @@ class BrainController extends TelegramBaseController{
     }
 
     _serializeList(user, words, pages) {
-        let serialized = `*Here You Go ${user} ${smile}*\n`;
+        let serialized = `*Here You Go ${user} ${emojis.smile}*\n`;
         words.forEach((word, index) => {
             serialized +=  `${word.charAt(0).toUpperCase() + word.slice(1)} => ${pages[index]}\n`
         })
@@ -156,31 +178,43 @@ class BrainController extends TelegramBaseController{
                 }	
             });
             if(found){
-                $.sendMessage(`Hurray ${success}, the word ${matched.charAt(0).toUpperCase() + matched.slice(1)} was found in page ${page}`)
-                telegramBot.api.sendMessage(myChatId, `User ${user} used the wordSearchHandler`) 
-                let imagesFile = fs.readFileSync('variables/images.json', 'utf8');
-                let jsonImages = JSON.parse(imagesFile);
-                let image = jsonImages.images[page];
-                if(image){
-                const send = $.sendPhoto(image);
-                send.catch((error) => {
-                    $.sendMessage(`Unfortunately ${user} ${sad}, no image for ${matched.charAt(0).toUpperCase() + matched.slice(1)} yet. It would be available soon${coolGlasses}`);
-                    telegramBot.api.sendMessage(myChatId, `ImageSendError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}\nPage: ${page}`)
-                    telegramBot.api.sendMessage(myChatId, `Description => ${error.description}`)
-                });
-               } else {
-                    $.sendMessage(`Unfortunately ${user} ${sad}, no image for ${matched.charAt(0).toUpperCase() + matched.slice(1)} yet. It would be available soon${coolGlasses}`);
-                    telegramBot.api.sendMessage(myChatId, `ImageSendError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}\nPage: ${page}\nDescription => Cannot read property 'url' of undefined`);
-               }
+                $.sendMessage(`Hurray ${emojis.success}, there is an interpretation for the word ${matched.charAt(0).toUpperCase() + matched.slice(1)}. \n\nHere you go..`)
+                //$.sendMessage(`Hurray ${emojis.success}, the word ${matched.charAt(0).toUpperCase() + matched.slice(1)} was found in page ${page}`)
+                telegramBot.api.sendMessage(myChatId, `User ${user} used the wordSearchHandler and searched for ${matched}`) 
+                if(Array.isArray(page)){
+                    page.forEach((pageElement) => {
+                        this.sendImage($, msg, user, userId, pageElement)
+                    })
+                } else{
+                    this.sendImage($, msg, user, userId, page, matched);
+                }
             
                 //$.sendMessage(`Hurray, the word ${matched.charAt(0).toUpperCase() + matched.slice(1)} was found in page ${page}`)		
             } else {
                 telegramBot.api.sendMessage(myChatId, `NotFoundError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
-                $.sendMessage(`Sorry ${user} ${sad}, ${input} wasn't found, try adding/removing (s) at the end of the word or try using the /spellchecker command to correct your spelling.\n\nLike this: /spellchecker ${input}`)
+                $.sendMessage(`Sorry ${user} ${emojis.sad}, ${input} wasn't found, try adding/removing (s) at the end of the word or try using the /spellchecker command to correct your spelling.\n\nLike this: /spellchecker ${input}`)
             }
         } else {
-            $.sendMessage(`Sorry ${user} ${sad}, your input isn't valid. Make sure you entered an english word`)
+            $.sendMessage(`Sorry ${user} ${emojis.sad}, your input isn't valid. Make sure you entered an english word`)
             telegramBot.api.sendMessage(myChatId, `NotEnglishError =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
+        }
+    }
+
+    // Send images for a particular page in the dream dictionary
+    sendImage($, msg, user, userId, page, matched){
+        let imagesFile = fs.readFileSync('variables/images.json', 'utf8');
+        let jsonImages = JSON.parse(imagesFile);
+        let image = jsonImages.images[page];
+        if(image){
+        const send = $.sendPhoto(image);
+        send.catch((error) => {
+            $.sendMessage(`Unfortunately ${user} ${emojis.sad}, no image for ${matched.charAt(0).toUpperCase() + matched.slice(1)} in page ${page} yet. It would be available soon${emojis.coolGlasses}`);
+            telegramBot.api.sendMessage(myChatId, `ImageSendError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}\nPage: ${page}`)
+            telegramBot.api.sendMessage(myChatId, `Description => ${error.description}`)
+        });
+        } else {
+            $.sendMessage(`Unfortunately ${user} ${emojis.sad}, no image for ${matched.charAt(0).toUpperCase() + matched.slice(1)} in page ${page} yet. It would be available soon${emojis.coolGlasses}`);
+            telegramBot.api.sendMessage(myChatId, `ImageSendError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}\nPage: ${page}\nDescription => Cannot read property 'url' of undefined`);
         }
     }
 
@@ -198,7 +232,7 @@ class BrainController extends TelegramBaseController{
             } 
         });
         if(!checker){
-            $.sendMessage(`Sorry ${user} ${sad}, Such alphabet doesn't exist, check your spelling`)
+            $.sendMessage(`Sorry ${user} ${emojis.sad}, Such alphabet doesn't exist, check your spelling`)
             telegramBot.api.sendMessage(myChatId, `NotFoundError[/findbyalpahbet] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
         }
     }
