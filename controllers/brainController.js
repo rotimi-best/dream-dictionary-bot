@@ -25,12 +25,17 @@ class BrainController extends TelegramBaseController{
         let msg = $.message.text;
         let val = msg.split(' ').slice(1).join(' ');
         if(msg == '/findbyword'){
-            $.sendMessage(`*Send me the word you want to lookup.*\n\nI am waiting...${smile}`, {parse_mode: 'Markdown'});
+            $.sendMessage(`*Which word are you looking for?*\n\nSend me, I am waiting...${smile}`, {parse_mode: 'Markdown'});
             //$.sendSticker(`${waitingSticker}`);
             $.waitForRequest
                 .then($ => {
-                    val = $.message.text;
-                    this.findWordLogic($, val, msg, user, userId)
+                    val = $.message.text; 
+                    if(val){
+                        this.findWordLogic($, val, msg, user, userId)
+                    } else {
+                        $.sendMessage(`Sorry ${user} ${sad}, your input isn't valid. click /help for more info.`)
+                        telegramBot.api.sendMessage(myChatId, `InvalidInputError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: Invalid input`)
+                    }
                 })
         } else if(val != '') {
             this.findWordLogic($, val, msg, user, userId)
@@ -160,17 +165,17 @@ class BrainController extends TelegramBaseController{
                 const send = $.sendPhoto(image);
                 send.catch((error) => {
                     $.sendMessage(`Unfortunately ${user} ${sad}, no image for ${matched.charAt(0).toUpperCase() + matched.slice(1)} yet. It would be available soon${coolGlasses}`);
-                    telegramBot.api.sendMessage(myChatId, `ImageSendError[/findbyWord] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}\nPage: ${page}`)
+                    telegramBot.api.sendMessage(myChatId, `ImageSendError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}\nPage: ${page}`)
                     telegramBot.api.sendMessage(myChatId, `Description => ${error.description}`)
                 });
                } else {
                     $.sendMessage(`Unfortunately ${user} ${sad}, no image for ${matched.charAt(0).toUpperCase() + matched.slice(1)} yet. It would be available soon${coolGlasses}`);
-                    telegramBot.api.sendMessage(myChatId, `ImageSendError[/findbyWord] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}\nPage: ${page}\nDescription => Cannot read property 'url' of undefined`);
+                    telegramBot.api.sendMessage(myChatId, `ImageSendError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}\nPage: ${page}\nDescription => Cannot read property 'url' of undefined`);
                }
             
                 //$.sendMessage(`Hurray, the word ${matched.charAt(0).toUpperCase() + matched.slice(1)} was found in page ${page}`)		
             } else {
-                telegramBot.api.sendMessage(myChatId, `NotFoundError[/findbyWord] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
+                telegramBot.api.sendMessage(myChatId, `NotFoundError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
                 $.sendMessage(`Sorry ${user} ${sad}, ${input} wasn't found, try adding/removing (s) at the end of the word or try using the /spellchecker command to correct your spelling.\n\nLike this: /spellchecker ${input}`)
             }
         } else {
