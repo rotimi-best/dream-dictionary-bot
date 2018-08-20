@@ -33,7 +33,7 @@ class OtherwiseController extends BaseController {
                 break;
             default:
                 //$.sendMessage(`To search for a word, e.g Bag\n\nJust type this:\n/findbyword Bag\n\nClick /help to see all I can do ${coolGlasses}`)
-                $.sendMessage(`To search for a word, e.g Bag\n\n1. Click ${fingerRight} /findbyword \n2. Enter the *WORD* you are looking for: Bag\n\nOR \n\n1. Open *MENU* (*The ICON on the top-right of your keyboard*)\n2. Click 🔎 Search\n3. Then follow the instruction ${smile}\n\n_If You Need Something Else You Can Always Find It In The Menu._\n*ENJOY* ${oneEye}`, { parse_mode: "Markdown" })
+                $.sendMessage(`To search for a word, e.g Bag\n\n1. Click ${fingerRight} /findbyword \n2. Enter the *WORD* you are looking for: Bag\n\nOR \n\n1. Open *MENU* (_The ICON on the top-right of your keyboard_)\n2. Click 🔎 Search\n3. Then follow the instruction ${smile}\n\n_Other Functionalities Can Be Found In The Menu._\n*ENJOY* ${oneEye}`, { parse_mode: "Markdown" })
                 telegramBot.api.sendMessage(myChatId, `GeneralError =>\nUsername: ${firstName}\nUserId: ${userId}\nInput: ${msg}`)
         }
     }
