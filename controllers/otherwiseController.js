@@ -19,6 +19,9 @@ class OtherwiseController extends BaseController {
         let msg = $.message.text ? $.message.text : 'Not a text';
         let userId = $.message.chat.id;
         switch(msg) {
+            case '💾 Save' :
+            $.sendMessage(`You can send me the content of your dream and I will save it ${oneEye}.\n\nPlease click this ${fingerRight} /save to continue`);
+                break;
             case '🔎 Search' :
                 $.sendMessage(`You can send me a key word from your dream and I will tell you its meaning ${oneEye}.\n\nPlease click this ${fingerRight} /findbyword to continue`);
                 break;

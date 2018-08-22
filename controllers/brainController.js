@@ -20,7 +20,8 @@ const emojis = {
     'search' : '🔎',
     'synonym' : '💡',
     'chat' : '🗣👂',
-    'fingerRight' : '👉'
+    'fingerRight' : '👉',
+    'save' : '💾'
 };
 
 const stickers = {
@@ -28,6 +29,14 @@ const stickers = {
 }
 
 class BrainController extends TelegramBaseController{
+
+    /**
+     * @param {Scope} $
+     */
+    saveHandler($){
+        $.sendMessage(`The save functionality is not ready yet. It should be anytime soon ${emojis.smile}`);
+    }
+
     /**
      * @param {Scope} $
      */
@@ -46,7 +55,7 @@ class BrainController extends TelegramBaseController{
                     if(val){
                         this.findWordLogic($, val, msg, user, userId)
                     } else {
-                        $.sendMessage(`Sorry ${user} ${emojis.emojis.sad}, your input isn't valid. click /help for more info.`)
+                        $.sendMessage(`Sorry ${user} ${emojis.sad}, your input isn't valid. click /help for more info.`)
                         telegramBot.api.sendMessage(myChatId, `InvalidInputError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: Invalid input`)
                     }
                 })
@@ -113,6 +122,7 @@ class BrainController extends TelegramBaseController{
      * @param {Scope} $
      */
     helpHandler($) {
+        //$.sendMessage(`\n\nHave any question? Ask my [creator](https://t.me/Lover_Of_Jesus)`, { parse_mode: "Markdown"})
         $.sendMessage(`To use my current version you need to have bought the book.\nhttps://www.amazon.com/Dictionary-Dreams-Tella-Olayeri/dp/B0053B58RQ\nIn my current version here is what I can do:\n\n1. You can check if a word is in the dictionary and find its page. To do this use /findbyword command and then the word \ne.g /findbyword football. \n\n2. Show you all the words in a particular alphabet. To do this use /findbyalphabet command followed by the alphabet \ne.g /findbyalphabet p \n\n*NOTE:*Click the backslash (right side of your text input area), and pressdown the command you want before you type a word (don't click on the command, if you do it will send immediately).\n\n  In the coming version you can be able to find the interpretaions directly from the bot without the dream dictionary.\n\nHave any question? Ask my [creator](https://t.me/Lover_Of_Jesus)`, { parse_mode: "Markdown"})
         let user = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
         let userId = $.message.chat.id;
@@ -127,6 +137,7 @@ class BrainController extends TelegramBaseController{
             message: 'Welcome, my goal is to help you interprete keywords in your dream.\n\nPick from the MENU below to get started:',
             layout: 2,
             oneTimeKeyboard : 'true',
+            '💾 Save' : () => {$.sendMessage(`You can send me the content of your dream and I will save it ${emojis.oneEye}.\n\nPlease click this ${emojis.fingerRight} /save to continue`);},
             '🔎 Search' : () => { $.sendMessage(`You can send me a key word from your dream and I will tell you its meaning ${emojis.oneEye}.\n\nPlease click this ${emojis.fingerRight} /findbyword to continue`); },
             '🔤 By Alphabet' : () => { $.sendMessage(`I can tell you all available keywords that begins with an alphabet of your choice${emojis.oneEye}\n\nPlease click this ${emojis.fingerRight} /findbyalphabet to continue`); },
             '🔠 Spell Checker' : () => { $.sendMessage(`If you are not sure of your spelling, I can correct it${emojis.coolGlasses}\n\nPlease click this ${emojis.fingerRight} /spellchecker to continue`); },
@@ -136,15 +147,6 @@ class BrainController extends TelegramBaseController{
         let user = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
         let userId = $.message.chat.id;
         telegramBot.api.sendMessage(myChatId, `You have a new user.\n\nUsername: ${user}\nUserId: ${userId}`)
-    }
-
-    get routes() {
-        return {
-            'wordSearchCommand': 'wordSearchHandler',
-            'alphSearchCommand' : 'alphSearchHandler',
-            'helpCommand' : 'helpHandler',
-            'startCommand' : 'startHandler'
-        }
     }
 
     _serializeList(user, words, pages) {
@@ -234,6 +236,16 @@ class BrainController extends TelegramBaseController{
         if(!checker){
             $.sendMessage(`Sorry ${user} ${emojis.sad}, Such alphabet doesn't exist, check your spelling`)
             telegramBot.api.sendMessage(myChatId, `NotFoundError[/findbyalpahbet] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
+        }
+    }
+
+    get routes() {
+        return {
+            'saveCommand' : 'saveHandler',
+            'wordSearchCommand': 'wordSearchHandler',
+            'alphSearchCommand' : 'alphSearchHandler',
+            'helpCommand' : 'helpHandler',
+            'startCommand' : 'startHandler'
         }
     }
 }

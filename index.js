@@ -17,6 +17,7 @@ const BrainController = require('./controllers/brainController')
 const DictionaryController = require('./controllers/dictionaryController')
 
 bot.router
+    .when(new TextCommand('/save', 'saveCommand'), new BrainController())
     .when(new TextCommand('/findbyword', 'wordSearchCommand'), new BrainController())
     .when(new TextCommand('/findbyalphabet', 'alphSearchCommand'), new BrainController())
     .when(new TextCommand('/spellchecker', 'spellCheckerCommand'), new DictionaryController())
