@@ -41,6 +41,52 @@ Zircon => 825
 Zither => 826
 Zoo => 823-824/826
 ```
+* **/spellchecker**: This command allows you to correct your spelling. Here is how to use it:
+
+```
+/spellchecker <the_word_you_want>
+/spellchecker flwer
+```
+
+The result will look like this:
+```
+Hey <Your_name>, the word flwer is incorrect :disappointed:. I've got some suggestions for you: :wink:
+
+Fewer
+Flower
+Flier
+
+To find the meaning of any of the word just type: /findbyword Fewer
+```
+
+* **/synonym**: This command allows you to check for the synonyms of any word. Here is how to use it:
+
+```
+/synonym <the_word_you_want>
+/synonym car
+```
+
+The result will look like this:
+```
+Hey <Your_name>, here are some synonyms for you:
+
+Alfa romeo
+Porsche
+Bodywork
+Audi
+Ferrari
+Gt
+Downforce
+Tyres
+Le mans
+Cars
+Mercedes- benz
+Mclaren
+Renault
+Chassis
+
+To find the meaning of any of the word just type: /findbyword Alfa romeo
+```
 
 * **/help**: This shows you basically every comand you can use in the bot and a contact information for clarifications and suggestions. Just type /help like this:
 
@@ -49,12 +95,7 @@ Zoo => 823-824/826
 ```
 
 ## Versions 
-This is version 1.0.0 future versions will be released soon
+* Version 1.0.0 - Search for words and their pages, find words related to an alphabet
+* Version 1.0.1 (Current) - Correct users spellings,  find synonyms to any word
+* Version 1.0.2 (Future) - Save your dreams and check for them later, See all interpretations of each keyword in the dictionary
 
-## Future
-
-Very soon there are more versions coming out, like:
-
-* Finding the exact interpretation of the word you are looking for
-* Finding synonyms to a word you are looking for to make it easy for you to find interpretations in the dictionary
-* A spell checker that helps you correct your spelling which assists you in finding words accurately 
