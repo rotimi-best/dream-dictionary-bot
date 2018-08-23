@@ -97,5 +97,5 @@ To find the meaning of any of the word just type: /findbyword Alfa romeo
 ## Versions 
 * Version 1.0.0 - Search for words and their pages, find words related to an alphabet
 * Version 1.0.1 (Current) - Correct users spellings,  find synonyms to any word
-* Version 1.0.2 (Future) - Save your dreams and check for them later, See all interpretations of each keyword in the dictionary
+* Version 1.0.2 (Future) - Save your dreams by text or auio and check for them later, See all interpretations of each keyword in the dictionary
 
