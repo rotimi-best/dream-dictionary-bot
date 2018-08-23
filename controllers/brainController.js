@@ -14,14 +14,15 @@ const emojis = {
     'sad' : '😞',
     'coolGlasses' : '😎',
     'oneEye' : '😉',
-    'spellChecker' : '🔠',
+    'spellChecker' : '📝',
     'help' : '🔑',
     'byAlphabet' : '🔤',
     'search' : '🔎',
-    'synonym' : '💡',
+    'synonym' : '📚',
     'chat' : '🗣👂',
     'fingerRight' : '👉',
-    'save' : '💾'
+    'save' : '💾',
+    'fingerDown' : '👇'
 };
 
 const stickers = {
@@ -35,6 +36,9 @@ class BrainController extends TelegramBaseController{
      */
     saveHandler($){
         $.sendMessage(`The save functionality is not ready yet. It should be anytime soon ${emojis.smile}`);
+        let user = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
+        let userId = $.message.chat.id;
+        telegramBot.api.sendMessage(myChatId, `Someone tried to save his dream\n\nUsername: ${user}\nUserId: ${userId}`)
     }
 
     /**
@@ -139,8 +143,9 @@ class BrainController extends TelegramBaseController{
             oneTimeKeyboard : 'true',
             '💾 Save' : () => {$.sendMessage(`You can send me the content of your dream and I will save it ${emojis.oneEye}.\n\nPlease click this ${emojis.fingerRight} /save to continue`);},
             '🔎 Search' : () => { $.sendMessage(`You can send me a key word from your dream and I will tell you its meaning ${emojis.oneEye}.\n\nPlease click this ${emojis.fingerRight} /findbyword to continue`); },
-            '🔤 By Alphabet' : () => { $.sendMessage(`I can tell you all available keywords that begins with an alphabet of your choice${emojis.oneEye}\n\nPlease click this ${emojis.fingerRight} /findbyalphabet to continue`); },
-            '🔠 Spell Checker' : () => { $.sendMessage(`If you are not sure of your spelling, I can correct it${emojis.coolGlasses}\n\nPlease click this ${emojis.fingerRight} /spellchecker to continue`); },
+            '🔎 Search By Alphabet 🔤' : () => { $.sendMessage(`I can tell you all available keywords that begins with an alphabet of your choice${emojis.oneEye}\n\nPlease click this ${emojis.fingerRight} /findbyalphabet to continue`); },
+            '📝 Spell Checker' : () => { $.sendMessage(`If you are not sure of your spelling, I can correct it${emojis.coolGlasses}\n\nPlease click this ${emojis.fingerRight} /spellchecker to continue`); },
+            '📚 Synonym' : () => {$.sendMessage(`I can help you find synonyms to any word ${emojis.oneEye}.\n\nPlease click this ${emojis.fingerRight} /synonym to continue`);},
             '🔑 Help' : () => { $.sendMessage(`You need more explanation?\n\nPlease click this ${emojis.fingerRight} /help to continue`); },            
         })
         //$.sendMessage(`To get started *click the backslash* on the _top right of your keyboard_ ( it looks like this / ).\nThere you would see the list of commands available for you to use.\nClick on /help to see examples of how to use those commands.`, { parse_mode: "Markdown"})

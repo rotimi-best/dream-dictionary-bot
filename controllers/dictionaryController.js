@@ -3,16 +3,32 @@
 const Telegram = require('telegram-node-bot');
 const TelegramBaseController = Telegram.TelegramBaseController
 
+const thesaurus = require('thesaurus-synonyms');
 const dictionary = require('dictionary-en-us')
 const nspell = require('nspell');
 const telegramBot = require('../index.js');
 const myChatId = '380473669';
 
-let smile = '🙂';
-let sad = '😞';
-let coolGlasses = '😎'
-let oneEye = '😉';
-let waitingSticker = 'CAADAgADPQgAAnlc4gkSO7rndkwKigI';
+const emojis = {
+    'success' : '🕺',
+    'smile' : '🙂',
+    'sad' : '😞',
+    'coolGlasses' : '😎',
+    'oneEye' : '😉',
+    'spellChecker' : '📝',
+    'help' : '🔑',
+    'byAlphabet' : '🔤',
+    'search' : '🔎',
+    'synonym' : '📚',
+    'chat' : '🗣👂',
+    'fingerRight' : '👉',
+    'save' : '💾',
+    'fingerDown' : '👇'
+};
+
+const stickers = {
+    'waitingSticker' : 'CAADAgADPQgAAnlc4gkSO7rndkwKigI'
+}
 
 class DictionaryController extends TelegramBaseController
 {
@@ -27,9 +43,9 @@ class DictionaryController extends TelegramBaseController
 
         if(word.length > 1 && word.match(/[a-z]/i)){
             //Logic to suggest
-            this.spellCheckerLogic($, word, user, userId, msg);
+            this.spellCheckerLogic($, word, user, userId);
         } else if(msg == '/spellchecker'){
-            $.sendMessage(`*Send me the WORD you want to check its spelling.*\n\nI am waiting...${smile}`, {parse_mode: 'Markdown'});
+            $.sendMessage(`*Send me the WORD you want to check its spelling.*\n\nI am waiting...${emojis.smile}`, {parse_mode: 'Markdown'});
             //$.sendSticker(`${waitingSticker}`);
             $.waitForRequest
                 .then($ => {
@@ -49,35 +65,68 @@ class DictionaryController extends TelegramBaseController
         // $.sendMessage(`For now this functionality is still in production, in few days it should be ready. Thank you`, { parse_mode: "Markdown"})
     }
 
+    /**
+     * @param {Scope} $
+     */
+    synonymHandler($){
+        let user = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
+        let userId = $.message.chat.id;
+        let msg = $.message.text;
+        let word = msg.split(' ').slice(1).join(' ')
+
+        if(word.length > 1 && word.match(/[a-z]/i)){
+            //Logic to suggest
+            this.findSynonymLogic($, word, user, userId);
+        } else if(msg == '/synonym'){
+            $.sendMessage(`Send me the WORD you want to check its spelling. ${emojis.smile}`, {parse_mode: 'Markdown'});
+            //$.sendSticker(`${waitingSticker}`);
+            $.waitForRequest
+                .then($ => {
+                    word = $.message.text;
+                    if(word.length > 1 && word.match(/[a-z]/i)){
+                        this.findSynonymLogic($, word, user, userId)
+                    } else {
+                        $.sendMessage(`Sorry your input is invalid, make sure you typed in english and its not a number.`, { parse_mode: "Markdown"})
+                        telegramBot.api.sendMessage(myChatId, `InvalidInputError[/synonym] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${word}`)
+                    }
+                })
+        } else {
+            //Sorry your word is invalid
+            $.sendMessage(`Sorry your input is invalid, make sure you typed in english and its not a number.`, { parse_mode: "Markdown"})
+            telegramBot.api.sendMessage(myChatId, `InvalidInputError[/synonym] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
+        }
+    }
+
     get routes() {
         return {
             'spellCheckerCommand' : 'spellCheckerHandler',
+            'synonymCommand' : 'synonymHandler'
         }
     }
 
     spellCheckerLogic($, word, user, userId) {
-        let spellChecker = (err, dict) => {
-        if(err) {
-            throw err
+        let spellChecker = (error, dict) => {
+        if(error) {
+            telegramBot.api.sendMessage(myChatId, `ApiError[/spellchecker] =>\nUsername: ${user}\nUserId: ${userId}\nMsg: ${error}`);
         }
         const spellObj = nspell(dict)
         let correct = spellObj.correct(word);
 
         if(correct){
             //Your value is correct
-            $.sendMessage(`Hey ${user}, your spelling is correct ${smile}, go ahead and find the meaning by just typing:\n\n/findbyword ${word}`, {parse_mode: 'Markdown'})
+            $.sendMessage(`Hey ${user}, your spelling is correct ${emojis.smile}, go ahead and find the meaning by just typing:\n\n/findbyword ${word}`, {parse_mode: 'Markdown'})
             telegramBot.api.sendMessage(myChatId, `User ${user} is using the spellCheckerHandler, but no suggestion for word: ${word}`);
         } else {
           //Your word is not correct
             let suggestions = spellObj.suggest(word)
             if(Array.isArray(suggestions) && suggestions.length > 1){
-                $.sendMessage(this._serializeList(user, word, suggestions), {parse_mode: 'Markdown'})
+                $.sendMessage(this._serializeList(user, word, suggestions, 'spellchecker'), {parse_mode: 'Markdown'})
               telegramBot.api.sendMessage(myChatId, `User ${user} just used the spellChecker for the word ${word}`) 
             } else if( Array.isArray(suggestions) && suggestions.length === 1){
-                $.sendMessage(`Hey ${user}, ${word} is incorrect ${sad}. I got a suggestion${oneEye} for you:\n\n${suggestions[0]}.\n\nTo find the meaning just type: /findbyword ${suggestions[0]}`, {parse_mode: 'Markdown'})
+                $.sendMessage(`Hey ${user}, ${word} is incorrect ${emojis.sad}. I got a suggestion${emojis.oneEye} for you:\n\n${emojis.fingerRight} ${suggestions[0]}.\n\nTo find the meaning just type: /findbyword ${suggestions[0]}`, {parse_mode: 'Markdown'})
                 telegramBot.api.sendMessage(myChatId, `User ${user} used the spellChecker for the word ${word}`) 
             } else{
-              $.sendMessage(`Unfortunately ${user}, that word isn't correct and I don't have any suggestion for you ${sad}.\n\nSince you are human you can correct it yourself${oneEye}. \n`)
+              $.sendMessage(`Unfortunately ${user}, that word isn't correct and I don't have any suggestion for you ${emojis.sad}.\n\nSince you are human you can correct it yourself${emojis.oneEye}.`)
               telegramBot.api.sendMessage(myChatId, `InvalidInputError[/spellchecker] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${suggestions}`);
             }
         }
@@ -85,10 +134,32 @@ class DictionaryController extends TelegramBaseController
       dictionary(spellChecker)
     }
 
-    _serializeList(user, word, suggestions) {
-        let serialized = `Hey ${user}, the word ${word} is incorrect ${sad}. I've got some suggestions for you: ${oneEye}\n\n`;
+    findSynonymLogic($, word, user, userId){
+        thesaurus.similar(word).then(synonyms => {
+            if(Array.isArray(synonyms) && synonyms.length > 1){
+                $.sendMessage(this._serializeList(user, word, synonyms, 'synonym'), {parse_mode: 'Markdown'})
+                telegramBot.api.sendMessage(myChatId, `User ${user} just used the synonymFunc for the word ${word}`) 
+            } else if( Array.isArray(synonyms) && synonyms.length === 1){
+                $.sendMessage(`Hey ${user}, I've got a synonym for you ${emojis.oneEye}:\n\n${emojis.fingerRight} ${suggestions[0]}.\n\nTo find the meaning just type: /findbyword ${suggestions[0]}`, {parse_mode: 'Markdown'})
+                telegramBot.api.sendMessage(myChatId, `User ${user} used the synonymFunc for the word ${word}`) 
+            } else{
+              $.sendMessage(`Unfortunately ${user}, that word isn't correct and I don't have any synonym for you ${emojis.sad}.\n\nSince you are human you can correct it yourself${emojis.oneEye}.`)
+              telegramBot.api.sendMessage(myChatId, `InvalidInputError[/synonym] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${suggestions}`);
+            }
+        }, error => {
+            telegramBot.api.sendMessage(myChatId, `ApiError[/synonym] =>\nUsername: ${user}\nUserId: ${userId}\nMsg: ${error}`);
+        });
+    }
+
+    _serializeList(user, word, suggestions, func) {
+        let serialized; 
+        if(func == 'spellchecker'){
+            serialized = `Hey ${user}, the word ${word} is incorrect ${emojis.sad}. I've got some suggestions for you: ${emojis.oneEye}\n\n`;
+        } else if(func == 'synonym'){
+            serialized = `Hey ${user}, here are some synonyms for you: ${emojis.oneEye}\n\n`;
+        }
         suggestions.forEach((suggestion) => {
-            serialized +=  `${suggestion.charAt(0).toUpperCase() + suggestion.slice(1)}\n`
+            serialized +=  `${emojis.fingerRight} ${suggestion.charAt(0).toUpperCase() + suggestion.slice(1)}\n`
         })
         serialized +=  `\nTo find the meaning of any of the word just type: /findbyword ${suggestions[0].charAt(0).toUpperCase() + suggestions[0].slice(1)}`
         return serialized;
