@@ -78,7 +78,7 @@ class DictionaryController extends TelegramBaseController
             //Logic to suggest
             this.findSynonymLogic($, word, user, userId);
         } else if(msg == '/synonym'){
-            $.sendMessage(`Send me the WORD you want to check its spelling. ${emojis.smile}`, {parse_mode: 'Markdown'});
+            $.sendMessage(`Send me the WORD you want to check its synonym. ${emojis.smile}`, {parse_mode: 'Markdown'});
             //$.sendSticker(`${waitingSticker}`);
             $.waitForRequest
                 .then($ => {
