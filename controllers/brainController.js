@@ -50,7 +50,7 @@ class BrainController extends TelegramBaseController{
         let userId = $.message.chat.id;
         let msg = $.message.text;
         let val = msg.split(' ').slice(1).join(' ');
-        if(msg == '/findbyword'){
+        if(msg == '🔎 Search'){
             $.sendMessage(`*Which *WORD* are you looking for?*\n\nSend me, I am waiting...${emojis.smile}`, {parse_mode: 'Markdown'});
             //$.sendSticker(`${waitingSticker}`);
             $.waitForRequest
@@ -79,9 +79,7 @@ class BrainController extends TelegramBaseController{
         let userId = $.message.chat.id;
         let msg = $.message.text;
         let val = msg.split(' ').slice(1).join(' ')
-        if(val){
-            this.findAlphabetLogic($, val, msg, user, userId)
-        } else if(msg == '/findbyalphabet') {
+        if(msg == '🔎 Search By Alphabet 🔤') {
             let scope = $;
             $.runInlineMenu({
                 layout: 4,
@@ -116,6 +114,8 @@ class BrainController extends TelegramBaseController{
                     { text:'Z', callback: () => {this.findAlphabetLogic(scope, 'Z', msg, user, userId)} }, 
                 ]
             });
+        } else if(val){
+            this.findAlphabetLogic($, val, msg, user, userId)
         } else {
             $.sendMessage(`Sorry ${user} ${emojis.sad}, your input isn't valid. click /help for more info.`)
             telegramBot.api.sendMessage(myChatId, `InvalidInputError[/findbyalpahbet] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)

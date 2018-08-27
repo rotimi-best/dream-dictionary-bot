@@ -19,9 +19,11 @@ class OtherwiseController extends BaseController {
         let firstName = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
         let msg = $.message.text ? $.message.text : 'Not a text';
         let userId = $.message.chat.id;
-        switch(msg) {
+        $.sendMessage(`To search for a word, e.g Bag\n\n1. Open *MENU* (_The ICON on the top-right of your keyboard_)\n2. Click 🔎 Search\n3. Enter the *WORD* you are looking for: Bag\n\n_You can check your spelling, find synonyms and many more, just open the menu_${fingerDown} _and explore_\n*ENJOY* ${oneEye}`, { parse_mode: "Markdown" })
+        telegramBot.api.sendMessage(myChatId, `GeneralError =>\nUsername: ${firstName}\nUserId: ${userId}\nInput: ${msg}`)
+        /* switch(msg) {
             case '💾 Save' :
-            $.sendMessage(`You can send me the content of your dream and I will save it ${oneEye}.\n\nPlease click this ${fingerRight} /save to continue`);
+               $.sendMessage(`You can send me the content of your dream and I will save it ${oneEye}.\n\nPlease click this ${fingerRight} /save to continue`);
                 break;
             case '🔎 Search' :
                 $.sendMessage(`You can send me a key word from your dream and I will tell you its meaning ${oneEye}.\n\nPlease click this ${fingerRight} /findbyword to continue`);
@@ -40,9 +42,8 @@ class OtherwiseController extends BaseController {
                 break;
             default:
                 //$.sendMessage(`To search for a word, e.g Bag\n\nJust type this:\n/findbyword Bag\n\nClick /help to see all I can do ${coolGlasses}`)
-                $.sendMessage(`To search for a word, e.g Bag\n\n1. Click ${fingerRight} /findbyword \n2. Enter the *WORD* you are looking for: Bag\n\nOR \n\n1. Open *MENU* (_The ICON on the top-right of your keyboard_)\n2. Click 🔎 Search\n3. Then follow the instruction ${smile}\n\n_Other Functionalities Can Be Found In The Menu._${fingerDown}\n*ENJOY* ${oneEye}`, { parse_mode: "Markdown" })
-                telegramBot.api.sendMessage(myChatId, `GeneralError =>\nUsername: ${firstName}\nUserId: ${userId}\nInput: ${msg}`)
-        }
+                
+        } */
     }
 }
 module.exports = OtherwiseController

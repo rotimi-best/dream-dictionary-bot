@@ -17,6 +17,7 @@
     "dictionary-en-us": "^2.0.0",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
+    "got": "^7.1.0",
     "nspell": "^2.1.0",
     "telegram-node-bot": "^4.0.5",
     "thesaurus-synonyms": "^2.1.3"

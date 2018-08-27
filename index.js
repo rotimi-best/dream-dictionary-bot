@@ -17,12 +17,12 @@ const BrainController = require('./controllers/brainController')
 const DictionaryController = require('./controllers/dictionaryController')
 
 bot.router
-    .when(new TextCommand('/save', 'saveCommand'), new BrainController())
-    .when(new TextCommand('/findbyword', 'wordSearchCommand'), new BrainController())
-    .when(new TextCommand('/findbyalphabet', 'alphSearchCommand'), new BrainController())
-    .when(new TextCommand('/spellchecker', 'spellCheckerCommand'), new DictionaryController())
-    .when(new TextCommand('/synonym', 'synonymCommand'), new DictionaryController())
-    .when(new TextCommand('/help', 'helpCommand'), new BrainController())
+    .when(new TextCommand('💾 Save', 'saveCommand'), new BrainController())
+    .when(new TextCommand('🔎 Search', 'wordSearchCommand'), new BrainController())
+    .when(new TextCommand('🔎 Search By Alphabet 🔤', 'alphSearchCommand'), new BrainController())
+    .when(new TextCommand('📝 Spell Checker', 'spellCheckerCommand'), new DictionaryController())
+    .when(new TextCommand('📚 Synonym', 'synonymCommand'), new DictionaryController())
+    .when(new TextCommand('🔑 Help', 'helpCommand'), new BrainController())
     .when(new TextCommand('/start', 'startCommand'), new BrainController())
     .otherwise(new OtherwiseController()) 
 
