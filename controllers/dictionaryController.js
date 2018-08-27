@@ -147,11 +147,11 @@ class DictionaryController extends TelegramBaseController
                 $.sendMessage(this._serializeList(user, word, synonyms, 'synonym'), {parse_mode: 'Markdown'})
                 telegramBot.api.sendMessage(myChatId, `User ${user} just used the synonymFunc for the word ${word}`) 
             } else if( Array.isArray(synonyms) && synonyms.length === 1){
-                $.sendMessage(`Hey ${user}, I've got a synonym for you ${emojis.oneEye}:\n\n${emojis.fingerRight} ${suggestions[0]}.\n\nTo find the meaning of the word by \n\n1. Opening the *MENU* (_The ICON on the top-right of your keyboard_),\n2. Click Search \n3. Enter the word: ${suggestions[0]}`, {parse_mode: 'Markdown'})
+                $.sendMessage(`Hey ${user}, I've got a synonym for you ${emojis.oneEye}:\n\n${emojis.fingerRight} ${synonyms[0]}.\n\nTo find the meaning of the word by \n\n1. Opening the *MENU* (_The ICON on the top-right of your keyboard_),\n2. Click Search \n3. Enter the word: ${synonyms[0]}`, {parse_mode: 'Markdown'})
                 telegramBot.api.sendMessage(myChatId, `User ${user} used the synonymFunc for the word ${word}`) 
             } else{
               $.sendMessage(`Unfortunately ${user}, that word isn't correct and I don't have any synonym for you ${emojis.sad}.\n\nSince you are human you can correct it yourself${emojis.oneEye}.`)
-              telegramBot.api.sendMessage(myChatId, `InvalidInputError[/synonym] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${suggestions}`);
+              telegramBot.api.sendMessage(myChatId, `InvalidInputError[/synonym] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${synonyms}`);
             }
         }, error => {
             telegramBot.api.sendMessage(myChatId, `ApiError[/synonym] =>\nUsername: ${user}\nUserId: ${userId}\nMsg: ${error}`);

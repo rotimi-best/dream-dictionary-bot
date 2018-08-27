@@ -126,7 +126,7 @@ class BrainController extends TelegramBaseController{
      * @param {Scope} $
      */
     helpHandler($) {
-        //$.sendMessage(`\n\nHave any question? Ask my [creator](https://t.me/Lover_Of_Jesus)`, { parse_mode: "Markdown"})
+        // $.sendMessage(`${emojis.fingerRight}To find the interpretation to a word click *🔎 Search*\n\n${emojis.fingerRight}Click 🔎*Search By Alphabet*🔤  to see words related to any alphabet\n\n${emojis.fingerRight}Check your spellings by clicking 📝 *Spell Checker* \n\n${emojis.fingerRight} Find synonyms\n\nStill not clear enough? Ask my [creator](https://t.me/Lover_Of_Jesus)`, { parse_mode: "Markdown"})
         $.sendMessage(`To use my current version you need to have bought the book.\nhttps://www.amazon.com/Dictionary-Dreams-Tella-Olayeri/dp/B0053B58RQ\nIn my current version here is what I can do:\n\n1. You can check if a word is in the dictionary and find its page. To do this use /findbyword command and then the word \ne.g /findbyword football. \n\n2. Show you all the words in a particular alphabet. To do this use /findbyalphabet command followed by the alphabet \ne.g /findbyalphabet p \n\n*NOTE:*Click the backslash (right side of your text input area), and pressdown the command you want before you type a word (don't click on the command, if you do it will send immediately).\n\n  In the coming version you can be able to find the interpretaions directly from the bot without the dream dictionary.\n\nHave any question? Ask my [creator](https://t.me/Lover_Of_Jesus)`, { parse_mode: "Markdown"})
         let user = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
         let userId = $.message.chat.id;
