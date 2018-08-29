@@ -141,12 +141,12 @@ class BrainController extends TelegramBaseController{
             message: 'Welcome, my goal is to help you interprete keywords in your dream.\n\nPick from the MENU below to get started:',
             layout: 2,
             oneTimeKeyboard : 'true',
-            '💾 Save' : () => {$.sendMessage(`You can send me the content of your dream and I will save it ${emojis.oneEye}.\n\nPlease click this ${emojis.fingerRight} /save to continue`);},
-            '🔎 Search' : () => { $.sendMessage(`You can send me a key word from your dream and I will tell you its meaning ${emojis.oneEye}.\n\nPlease click this ${emojis.fingerRight} /findbyword to continue`); },
-            '🔎 Search By Alphabet 🔤' : () => { $.sendMessage(`I can tell you all available keywords that begins with an alphabet of your choice${emojis.oneEye}\n\nPlease click this ${emojis.fingerRight} /findbyalphabet to continue`); },
-            '📝 Spell Checker' : () => { $.sendMessage(`If you are not sure of your spelling, I can correct it${emojis.coolGlasses}\n\nPlease click this ${emojis.fingerRight} /spellchecker to continue`); },
-            '📚 Synonym' : () => {$.sendMessage(`I can help you find synonyms to any word ${emojis.oneEye}.\n\nPlease click this ${emojis.fingerRight} /synonym to continue`);},
-            '🔑 Help' : () => { $.sendMessage(`You need more explanation?\n\nPlease click this ${emojis.fingerRight} /help to continue`); },            
+            '💾 Save' : () => {},
+            '🔎 Search' : () => {},
+            '🔎 Search By Alphabet 🔤' : () => {},
+            '📝 Spell Checker' : () => {},
+            '📚 Synonym' : () => {},
+            '🔑 Help' : () => {},            
         })
         //$.sendMessage(`To get started *click the backslash* on the _top right of your keyboard_ ( it looks like this / ).\nThere you would see the list of commands available for you to use.\nClick on /help to see examples of how to use those commands.`, { parse_mode: "Markdown"})
         let user = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
