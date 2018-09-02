@@ -25,7 +25,8 @@ const emojis = {
     'chat' : '🗣👂',
     'fingerRight' : '👉',
     'save' : '💾',
-    'fingerDown' : '👇'
+    'fingerDown' : '👇',
+    'byNumber' : '🔢'
 };
 
 const stickers = {
@@ -53,22 +54,44 @@ class BrainController extends TelegramBaseController{
         let user = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
         let userId = $.message.chat.id;
         let msg = text ? text : $.message.text;
-        let val = msg.split(' ').slice(1).join(' ');
         if(msg == '🔎 Search'){
-            $.sendMessage(`*Which *WORD* are you looking for?*\n\nSend me, I am waiting...${emojis.smile}`, {parse_mode: 'Markdown'});
-            //$.sendSticker(`${waitingSticker}`);
-            $.waitForRequest
-                .then($ => {
-                    val = $.message.text; 
-                    if(val){
-                        this.findWordLogic($, val, msg, user, userId)
-                    } else {
-                        $.sendMessage(`Sorry ${user} ${emojis.sad}, your input isn't valid. click /help for more info.`)
-                        telegramBot.api.sendMessage(myChatId, `InvalidInputError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: Invalid input`)
-                    }
-                })
-        } else if(val != '') {
-            this.findWordLogic($, val, msg, user, userId)
+            let scope = $;
+            $.runInlineMenu({
+                layout: 2,
+                method: 'sendMessage',
+                params: ['Do you want to search by a Word or a Page?'],
+                menu: [
+                    { text:'Word', callback: () => {
+                        scope.sendMessage(`*Which *WORD* are you looking for?*\n\nSend me, I am waiting...${emojis.smile}`, {parse_mode: 'Markdown'});
+                        scope.waitForRequest
+                             .then($ => {
+                                let val = $.message.text; 
+                                 if(val){
+                                     this.findWordLogic($, val, user, userId)
+                                 } else {
+                                     $.sendMessage(`Sorry ${user} ${emojis.sad}, your input isn't valid. click /help for more info.`)
+                                     telegramBot.api.sendMessage(myChatId, `InvalidInputError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: Invalid input`)
+                                 }
+                             })  
+                     } 
+                 },
+                 { text:'Page', callback: () => {
+                    scope.sendMessage(`*Which *PAGE* are you looking for?*\n\nSend me, I am waiting...${emojis.smile}`, {parse_mode: 'Markdown'});
+                    scope.waitForRequest
+                         .then($ => {
+                            let val = $.message.text; 
+                             if(val){
+                                 this.findWordLogic($, val, user, userId)
+                             } else {
+                                 $.sendMessage(`Sorry ${user} ${emojis.sad}, your input isn't valid. click /help for more info.`)
+                                 telegramBot.api.sendMessage(myChatId, `InvalidInputError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: Invalid input`)
+                             }
+                         })   
+                    } 
+                 },  
+                ]
+            });
+           
         } else{
             $.sendMessage(`Sorry ${user} ${emojis.sad}, your input isn't valid. click /help for more info.`)
             telegramBot.api.sendMessage(myChatId, `InvalidInputError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
@@ -199,49 +222,61 @@ class BrainController extends TelegramBaseController{
         return serialized;
     }
 
-    findWordLogic($, val, msg, user, userId){
-        let input = val.trim().replace(/ /g, '');
+    findWordLogic($, msg, user, userId){
         let found = false
-        let matched, page
-        let firstLetter = input.match(/\w/);
-
+        let matched, page, input
+        let numErr = false
+        if(isNaN(msg)){
+            console.log('not a number', msg);
+            input = msg.trim().replace(/ /g, '');
+            let firstLetter = input.match(/\w/);
             if(firstLetter){
-            lib.arr.forEach((element) => {
-                let alphabet = element.container.alph
-                if(alphabet == firstLetter['0'].toLowerCase()){
-                    let words = element.container.words
-                    words.forEach((el, index) => {
-                        let reg = new RegExp('\\b' + input + '\\b', 'gi')
-                        let matchWord = el.match(reg)
-                        if(matchWord){
-                            found = true
-                            matched = matchWord['0']
-                            page = element.container.pages[index]
-                        }
-                    })
-                }	
-            });
-            if(found){
-                $.sendMessage(`Hurray ${emojis.success}, there is an interpretation for the word ${matched.charAt(0).toUpperCase() + matched.slice(1)}. \n\nHere you go..`)
-                //$.sendMessage(`Hurray ${emojis.success}, the word ${matched.charAt(0).toUpperCase() + matched.slice(1)} was found in page ${page}`)
-                telegramBot.api.sendMessage(myChatId, `User ${user} used the wordSearchHandler and searched for ${matched}`) 
-                if(Array.isArray(page)){
-                    page.forEach((pageElement) => {
-                        this.sendImage($, msg, user, userId, pageElement)
-                    })
-                } else{
-                    this.sendImage($, msg, user, userId, page, matched);
-                }
-            
-                //$.sendMessage(`Hurray, the word ${matched.charAt(0).toUpperCase() + matched.slice(1)} was found in page ${page}`)		
+                lib.arr.forEach((element) => {
+                    let alphabet = element.container.alph
+                    if(alphabet == firstLetter['0'].toLowerCase()){
+                        let words = element.container.words
+                        words.forEach((el, index) => {
+                            let reg = new RegExp('\\b' + input + '\\b', 'gi')
+                            let matchWord = el.match(reg)
+                            if(matchWord){
+                                found = true
+                                matched = matchWord['0']
+                                page = element.container.pages[index]
+                            }
+                        })
+                    }	
+                });
             } else {
-                telegramBot.api.sendMessage(myChatId, `NotFoundError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
-                $.sendMessage(`Sorry ${user} ${emojis.sad}, ${input} wasn't found, try adding/removing (s) at the end of the word or try using the /spellchecker command to correct your spelling.\n\nLike this: /spellchecker ${input}`)
+                $.sendMessage(`Sorry ${user} ${emojis.sad}, your input isn't valid. Make sure you entered an english word`)
+                telegramBot.api.sendMessage(myChatId, `NotEnglishError =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
             }
         } else {
-            $.sendMessage(`Sorry ${user} ${emojis.sad}, your input isn't valid. Make sure you entered an english word`)
-            telegramBot.api.sendMessage(myChatId, `NotEnglishError =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
-        }
+            if(msg >= 19 && msg <= 826){
+                found = true
+                page = msg
+                matched = `Page ${page}`
+            } else{
+                numErr = true
+                $.sendMessage(`Sorry ${user} ${emojis.sad}, such page isn't in the dictionary`)
+                telegramBot.api.sendMessage(myChatId, `NotEnglishError =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
+            }
+        } 
+
+        if(found){
+            $.sendMessage(`Hurray ${emojis.success}, there is an interpretation for ${matched.charAt(0).toUpperCase() + matched.slice(1)}. \n\nHere you go..`)
+            //$.sendMessage(`Hurray ${emojis.success}, the word ${matched.charAt(0).toUpperCase() + matched.slice(1)} was found in page ${page}`)
+            telegramBot.api.sendMessage(myChatId, `User ${user} used the wordSearchHandler and searched for ${matched}`) 
+            if(Array.isArray(page)){
+                page.forEach((pageElement) => {
+                    this.sendImage($, msg, user, userId, pageElement)
+                })
+            } else{
+                this.sendImage($, msg, user, userId, page, matched);
+            }	
+        } else if(!found && !numErr) {
+            telegramBot.api.sendMessage(myChatId, `NotFoundError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
+            $.sendMessage(`Sorry ${user} ${emojis.sad}, ${input} wasn't found, try adding/removing (s) at the end of the word or try using the /spellchecker command to correct your spelling.\n\nLike this: /spellchecker ${input}`)
+        }  
     }
 
     // Send images for a particular page in the dream dictionary
