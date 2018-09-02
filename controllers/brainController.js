@@ -275,7 +275,7 @@ class BrainController extends TelegramBaseController{
             }	
         } else if(!found && !numErr) {
             telegramBot.api.sendMessage(myChatId, `NotFoundError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
-            $.sendMessage(`Sorry ${user} ${emojis.sad}, ${input} wasn't found, try adding/removing (s) at the end of the word or try using the /spellchecker command to correct your spelling.\n\nLike this: /spellchecker ${input}`)
+            $.sendMessage(`Sorry ${user} ${emojis.sad}, ${input} wasn't found.\n\nTry adding/removing (s) at the end of the word or check your spelling by using the SpellChecker in the menu.`)
         }  
     }
 
