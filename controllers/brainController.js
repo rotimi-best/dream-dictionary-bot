@@ -59,7 +59,7 @@ class BrainController extends TelegramBaseController{
             $.runInlineMenu({
                 layout: 2,
                 method: 'sendMessage',
-                params: ['Do you want to search by a Word or a Page?'],
+                params: ['Do you want to search for a Word or a Page?'],
                 menu: [
                     { text:'Word', callback: () => {
                         scope.sendMessage(`*Which *WORD* are you looking for?*\n\nSend me, I am waiting...${emojis.smile}`, {parse_mode: 'Markdown'});
