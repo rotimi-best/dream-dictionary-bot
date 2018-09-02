@@ -23,13 +23,13 @@ try{
   bot.router
       .when(new TextCommand('💾 Save', 'saveCommand'), new BrainController())
       .when(new TextCommand('🔎 Search', 'wordSearchCommand'), new BrainController())
-      .when(new TextCommand('🔎 Search By Alphabet 🔤', 'alphSearchCommand'), new BrainController())
+      .when(new TextCommand('🔎 Find By Alphabet 🔤', 'alphSearchCommand'), new BrainController())
       .when(new TextCommand('📝 Spell Checker', 'spellCheckerCommand'), new DictionaryController())
       .when(new TextCommand('📚 Synonym', 'synonymCommand'), new DictionaryController())
       .when(new TextCommand('🔑 Help', 'helpCommand'), new BrainController())
       .when(new TextCommand('🗣👂 Feedback', 'feedbackCommand'), new BrainController())
       .when(new TextCommand('/start', 'startCommand'), new BrainController())
-    //   .otherwise(new OtherwiseController()) 
+      .otherwise(new OtherwiseController()) 
 
 } catch(error){
   bot.api.sendMessage(process.env.CHAT_ID, `Someone is sending spam to your bot. Here is the msg ${error}`)

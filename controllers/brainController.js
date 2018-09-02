@@ -83,7 +83,7 @@ class BrainController extends TelegramBaseController{
         let userId = $.message.chat.id;
         let msg = text ? text : $.message.text;
         // let val = msg.split(' ').slice(1).join(' ')
-        if(msg == '🔎 Search By Alphabet 🔤') {
+        if(msg == '🔎 Find By Alphabet 🔤') {
             let scope = $;
             $.runInlineMenu({
                 layout: 4,
@@ -170,8 +170,8 @@ class BrainController extends TelegramBaseController{
                 let text = '🔎 Search';
                 this.wordSearchHandler(scope, text)
             },
-            '🔎 Search By Alphabet 🔤' : () => {
-                let text = '🔎 Search By Alphabet 🔤'
+            '🔎 Find By Alphabet 🔤' : () => {
+                let text = '🔎 Find By Alphabet 🔤'
                 this.alphSearchHandler(scope, text)
             },
             '📝 Spell Checker' : () => {
@@ -194,7 +194,7 @@ class BrainController extends TelegramBaseController{
     _serializeList(user, words, pages) {
         let serialized = `*Here You Go ${user} ${emojis.smile}*\n`;
         words.forEach((word, index) => {
-            serialized +=  `${word.charAt(0).toUpperCase() + word.slice(1)} => ${pages[index]}\n`
+            serialized +=  `${word.charAt(0).toUpperCase() + word.slice(1)} (pg. ${pages[index]}) \n`
         })
         return serialized;
     }
