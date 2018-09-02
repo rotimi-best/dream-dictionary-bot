@@ -8,6 +8,9 @@ const fs = require('fs')
 const telegramBot = require('../index.js')
 const myChatId = '380473669';
 
+const DictionaryController = require('./dictionaryController')
+let dictionary = new DictionaryController;
+
 const emojis = {
     'success' : '🕺',
     'smile' : '🙂',
@@ -26,7 +29,8 @@ const emojis = {
 };
 
 const stickers = {
-    'waitingSticker' : 'CAADAgADPQgAAnlc4gkSO7rndkwKigI'
+    'waitingSticker' : 'CAADAgADPQgAAnlc4gkSO7rndkwKigI',
+    'thanksStickerLionKing' : 'CAADAgADqQIAAs-71A5iOMlYXuwndQI',
 }
 
 class BrainController extends TelegramBaseController{
@@ -44,11 +48,11 @@ class BrainController extends TelegramBaseController{
     /**
      * @param {Scope} $
      */
-    wordSearchHandler($) {
+    wordSearchHandler($, text) {
         // $.sendMessage('I am here to help you.')
         let user = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
         let userId = $.message.chat.id;
-        let msg = $.message.text;
+        let msg = text ? text : $.message.text;
         let val = msg.split(' ').slice(1).join(' ');
         if(msg == '🔎 Search'){
             $.sendMessage(`*Which *WORD* are you looking for?*\n\nSend me, I am waiting...${emojis.smile}`, {parse_mode: 'Markdown'});
@@ -74,11 +78,11 @@ class BrainController extends TelegramBaseController{
     /**
      * @param {Scope} $
      */
-    alphSearchHandler($) {
+    alphSearchHandler($, text) {
         let user = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
         let userId = $.message.chat.id;
-        let msg = $.message.text;
-        let val = msg.split(' ').slice(1).join(' ')
+        let msg = text ? text : $.message.text;
+        // let val = msg.split(' ').slice(1).join(' ')
         if(msg == '🔎 Search By Alphabet 🔤') {
             let scope = $;
             $.runInlineMenu({
@@ -86,36 +90,34 @@ class BrainController extends TelegramBaseController{
                 method: 'sendMessage',
                 params: ['Please select an alphabet below:'],
                 menu: [
-                    { text:'A', callback: () => {this.findAlphabetLogic(scope, 'A', msg, user, userId)} },
-                    { text:'B', callback: () => {this.findAlphabetLogic(scope, 'B', msg, user, userId)} },  
-                    { text:'C', callback: () => {this.findAlphabetLogic(scope, 'C', msg, user, userId)} }, 
-                    { text:'D', callback: () => {this.findAlphabetLogic(scope, 'D', msg, user, userId)} }, 
-                    { text:'E', callback: () => {this.findAlphabetLogic(scope, 'E', msg, user, userId)} }, 
-                    { text:'F', callback: () => {this.findAlphabetLogic(scope, 'F', msg, user, userId)} }, 
-                    { text:'G', callback: () => {this.findAlphabetLogic(scope, 'G', msg, user, userId)} }, 
-                    { text:'H', callback: () => {this.findAlphabetLogic(scope, 'H', msg, user, userId)} }, 
-                    { text:'I', callback: () => {this.findAlphabetLogic(scope, 'I', msg, user, userId)} }, 
-                    { text:'J', callback: () => {this.findAlphabetLogic(scope, 'J', msg, user, userId)} }, 
-                    { text:'K', callback: () => {this.findAlphabetLogic(scope, 'K', msg, user, userId)} }, 
-                    { text:'L', callback: () => {this.findAlphabetLogic(scope, 'L', msg, user, userId)} }, 
-                    { text:'M', callback: () => {this.findAlphabetLogic(scope, 'M', msg, user, userId)} }, 
-                    { text:'N', callback: () => {this.findAlphabetLogic(scope, 'N', msg, user, userId)} }, 
-                    { text:'O', callback: () => {this.findAlphabetLogic(scope, 'O', msg, user, userId)} }, 
-                    { text:'P', callback: () => {this.findAlphabetLogic(scope, 'P', msg, user, userId)} }, 
-                    { text:'Q', callback: () => {this.findAlphabetLogic(scope, 'Q', msg, user, userId)} }, 
-                    { text:'R', callback: () => {this.findAlphabetLogic(scope, 'R', msg, user, userId)} }, 
-                    { text:'S', callback: () => {this.findAlphabetLogic(scope, 'S', msg, user, userId)} }, 
-                    { text:'T', callback: () => {this.findAlphabetLogic(scope, 'T', msg, user, userId)} },                          
-                    { text:'U', callback: () => {this.findAlphabetLogic(scope, 'U', msg, user, userId)} }, 
-                    { text:'V', callback: () => {this.findAlphabetLogic(scope, 'V', msg, user, userId)} }, 
-                    { text:'W', callback: () => {this.findAlphabetLogic(scope, 'W', msg, user, userId)} }, 
-                    { text:'X', callback: () => {this.findAlphabetLogic(scope, 'X', msg, user, userId)} }, 
-                    { text:'Y', callback: () => {this.findAlphabetLogic(scope, 'Y', msg, user, userId)} }, 
-                    { text:'Z', callback: () => {this.findAlphabetLogic(scope, 'Z', msg, user, userId)} }, 
+                    { text:'A', callback: () => {this.findAlphabetLogic(scope, 'A', user, userId)} },
+                    { text:'B', callback: () => {this.findAlphabetLogic(scope, 'B', user, userId)} },  
+                    { text:'C', callback: () => {this.findAlphabetLogic(scope, 'C', user, userId)} }, 
+                    { text:'D', callback: () => {this.findAlphabetLogic(scope, 'D', user, userId)} }, 
+                    { text:'E', callback: () => {this.findAlphabetLogic(scope, 'E', user, userId)} }, 
+                    { text:'F', callback: () => {this.findAlphabetLogic(scope, 'F', user, userId)} }, 
+                    { text:'G', callback: () => {this.findAlphabetLogic(scope, 'G', user, userId)} }, 
+                    { text:'H', callback: () => {this.findAlphabetLogic(scope, 'H', user, userId)} }, 
+                    { text:'I', callback: () => {this.findAlphabetLogic(scope, 'I', user, userId)} }, 
+                    { text:'J', callback: () => {this.findAlphabetLogic(scope, 'J', user, userId)} }, 
+                    { text:'K', callback: () => {this.findAlphabetLogic(scope, 'K', user, userId)} }, 
+                    { text:'L', callback: () => {this.findAlphabetLogic(scope, 'L', user, userId)} }, 
+                    { text:'M', callback: () => {this.findAlphabetLogic(scope, 'M', user, userId)} }, 
+                    { text:'N', callback: () => {this.findAlphabetLogic(scope, 'N', user, userId)} }, 
+                    { text:'O', callback: () => {this.findAlphabetLogic(scope, 'O', user, userId)} }, 
+                    { text:'P', callback: () => {this.findAlphabetLogic(scope, 'P', user, userId)} }, 
+                    { text:'Q', callback: () => {this.findAlphabetLogic(scope, 'Q', user, userId)} }, 
+                    { text:'R', callback: () => {this.findAlphabetLogic(scope, 'R', user, userId)} }, 
+                    { text:'S', callback: () => {this.findAlphabetLogic(scope, 'S', user, userId)} }, 
+                    { text:'T', callback: () => {this.findAlphabetLogic(scope, 'T', user, userId)} },                          
+                    { text:'U', callback: () => {this.findAlphabetLogic(scope, 'U', user, userId)} }, 
+                    { text:'V', callback: () => {this.findAlphabetLogic(scope, 'V', user, userId)} }, 
+                    { text:'W', callback: () => {this.findAlphabetLogic(scope, 'W', user, userId)} }, 
+                    { text:'X', callback: () => {this.findAlphabetLogic(scope, 'X', user, userId)} }, 
+                    { text:'Y', callback: () => {this.findAlphabetLogic(scope, 'Y', user, userId)} }, 
+                    { text:'Z', callback: () => {this.findAlphabetLogic(scope, 'Z', user, userId)} }, 
                 ]
             });
-        } else if(val){
-            this.findAlphabetLogic($, val, msg, user, userId)
         } else {
             $.sendMessage(`Sorry ${user} ${emojis.sad}, your input isn't valid. click /help for more info.`)
             telegramBot.api.sendMessage(myChatId, `InvalidInputError[/findbyalpahbet] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`)
@@ -136,17 +138,52 @@ class BrainController extends TelegramBaseController{
     /**
      * @param {Scope} $
      */
+    feedbackHandler($) {
+        let user = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
+        let userId = $.message.chat.id;
+        $.sendMessage(`Tell me how you want me to serve you better. ${emojis.smile}`, { parse_mode: "Markdown"});
+        $.waitForRequest
+            .then($ => {
+                let val = $.message.text; 
+                if(val){
+                    telegramBot.api.sendMessage(myChatId, `Feedback from ${user}\n\n ${val}`)
+                    $.sendMessage(`Thanks for your feedback, it is really appreciated`)
+                    $.sendSticker(stickers.thanksStickerLionKing);
+                } else {
+                    $.sendMessage(`Sorry ${user} ${emojis.sad}, your input isn't valid. click /help for more info.`)
+                    telegramBot.api.sendMessage(myChatId, `InvalidInputError[feedbackHandler] =>\nUsername: ${user}\nUserId: ${userId}\nInput: Invalid input`)
+                }
+            })
+    }
+
+    /**
+     * @param {Scope} $
+     */
     startHandler($) {
+        let scope = $;
         $.runMenu({
             message: 'Welcome, my goal is to help you interprete keywords in your dream.\n\nPick from the MENU below to get started:',
             layout: 2,
             oneTimeKeyboard : 'true',
-            '💾 Save' : () => {},
-            '🔎 Search' : () => {},
-            '🔎 Search By Alphabet 🔤' : () => {},
-            '📝 Spell Checker' : () => {},
-            '📚 Synonym' : () => {},
-            '🔑 Help' : () => {},            
+            '💾 Save' : () => {this.saveHandler(scope)},
+            '🔎 Search' : () => {
+                let text = '🔎 Search';
+                this.wordSearchHandler(scope, text)
+            },
+            '🔎 Search By Alphabet 🔤' : () => {
+                let text = '🔎 Search By Alphabet 🔤'
+                this.alphSearchHandler(scope, text)
+            },
+            '📝 Spell Checker' : () => {
+                let text = '📝 Spell Checker'
+                dictionary.spellCheckerHandler(scope, text)
+            },
+            '📚 Synonym' : () => {
+                let text = '📚 Synonym'
+                dictionary.synonymHandler(scope, text)
+            },
+            '🔑 Help' : () => {this.helpHandler(scope)},  
+            '🗣👂 Feedback' : () => {this.feedbackHandler(scope)},           
         })
         //$.sendMessage(`To get started *click the backslash* on the _top right of your keyboard_ ( it looks like this / ).\nThere you would see the list of commands available for you to use.\nClick on /help to see examples of how to use those commands.`, { parse_mode: "Markdown"})
         let user = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
@@ -225,8 +262,8 @@ class BrainController extends TelegramBaseController{
         }
     }
 
-    findAlphabetLogic($, val, msg, user, userId){
-        let input = val.trim().toLowerCase()
+    findAlphabetLogic($, msg, user, userId){
+        let input = msg.toLowerCase()
         let checker = false
         lib.arr.forEach((element) => {
             let alphabet = element.container.alph
@@ -250,7 +287,8 @@ class BrainController extends TelegramBaseController{
             'wordSearchCommand': 'wordSearchHandler',
             'alphSearchCommand' : 'alphSearchHandler',
             'helpCommand' : 'helpHandler',
-            'startCommand' : 'startHandler'
+            'startCommand' : 'startHandler',
+            'feedbackCommand' : 'feedbackHandler',
         }
     }
 }

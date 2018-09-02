@@ -36,10 +36,10 @@ class DictionaryController extends TelegramBaseController
     /**
      * @param {Scope} $
      */
-    spellCheckerHandler($) {
+    spellCheckerHandler($, text) {
         let user = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
         let userId = $.message.chat.id;
-        let msg = $.message.text;
+        let msg = text ? text : $.message.text;
         let word = msg.split(' ').slice(1).join(' ')
 
         if(msg == '📝 Spell Checker'){
@@ -69,10 +69,10 @@ class DictionaryController extends TelegramBaseController
     /**
      * @param {Scope} $
      */
-    synonymHandler($){
+    synonymHandler($, text){
         let user = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
         let userId = $.message.chat.id;
-        let msg = $.message.text;
+        let msg = text ? text : $.message.text;
         let word = msg.split(' ').slice(1).join(' ')
 
         if(msg == '📚 Synonym'){
