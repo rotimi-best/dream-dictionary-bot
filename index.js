@@ -4,6 +4,7 @@
   const Telegram = require('telegram-node-bot')
   require('dotenv').config();
   const TextCommand = Telegram.TextCommand
+
   const bot = new Telegram.Telegram(process.env.API_KEY, {
       workers: 1,
       webAdmin: {
@@ -13,12 +14,10 @@
   });
   
   module.exports = bot;
-// try {
-  const OtherwiseController = require('./controllers/otherwiseController');
-  const BrainController = require('./controllers/brainController');
-  const DictionaryController = require('./controllers/dictionaryController');
 
-
+  const OtherwiseController = require('./controllers/otherwiseController')
+  const BrainController = require('./controllers/brainController')
+  const DictionaryController = require('./controllers/dictionaryController')
 
   bot.router
       .when(new TextCommand('💾 Save', 'saveCommand'), new BrainController())
@@ -31,8 +30,3 @@
       .when(new TextCommand('/start', 'startCommand'), new BrainController())
       .when(new TextCommand('/test', 'testCommand'), new BrainController())
       .otherwise(new OtherwiseController()) 
-
-// } catch(error){
-//   bot.api.sendMessage(process.env.CHAT_ID, `Someone is sending spam to your bot. Here is the msg ${error}`)
-//   console.log('Someone is sending spam to your bot. Here is the msg', error)
-// } 

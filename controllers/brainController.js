@@ -162,45 +162,58 @@ class BrainController extends TelegramBaseController{
       const msg = $.message.text;
       console.log(msg);
       const form = {
-    name: {
-	    q: 'Send me your name',
-	    error: 'sorry, wrong input',
-	    validator: (message, callback) => {
-		    if(message.text) {
-          console.log(message.text); 
-			    callback(true, message.text) //you must pass the result also
-			    return
-		    }
+        name: {
+          q: 'Send me your name',
+          error: 'sorry, wrong input',
+          validator: (message, callback) => {
+            if(message.text) {
+              console.log(message.text); 
+              callback(true, message.text) //you must pass the result also
+              return
+            }
 
-		    callback(false)
-	    }
-    },
-    age: {
-	    q: 'Send me your age',
-	    error: 'sorry, wrong input',
-      keyboard: [
-        [{text: 'btn 1'}], [{text: 'btn 2'}]
-      ],
-	    validator: (message, callback) => {
-        // console.log(message)
-		    if (message.text && Number(message.text)) {
-			    let answer = callback(true, Number(message.text))
-          console.log(answer)
-			    return
-		    }
+            callback(false)
+          }
+        },
+        age: {
+          q: 'Send me your age',
+          error: 'sorry, wrong input',
+          keyboard: [
+            [{text: 'btn 1'}], [{text: 'btn 2'}]
+          ],
+          validator: (message, callback) => {
+            // console.log(message)
+            if (message.text && Number(message.text)) {
+              let answer = callback(true, Number(message.text))
+              console.log(answer)
+              return
+            }
 
-		    callback(false)
-	    }
+            callback(false)
+          }
+        }
     }
-}
-
-$.runForm(form, (result) => {
-  $.sendMessage(`Thanks you for your answer ${JSON.stringify(result)}`, 
-                {
-                  reply_markup: JSON.stringify({ remove_keyboard: true }),
-                });
-	console.log(form)
-})
+      
+    $.runMenu({
+        message: 'Select:',
+        options: {
+            parse_mode: 'Markdown' // in options field you can pass some additional data, like parse_mode
+        },
+        'Exit': {
+          message: 'Do you realy want to exit?',
+          resizeKeyboard: true,
+          'yes': () =>  { // remove keyboard when you send message
+                   $.sendMessage('Alright', { reply_markup: JSON.stringify({ remove_keyboard: true }) }) },
+          'no': () => { $.sendMessage('Exiting', { reply_markup: JSON.stringify({ remove_keyboard: true }) }) }
+        }
+    });
+// $.runForm(form, (result) => {
+//   $.sendMessage(`Thanks you for your answer ${JSON.stringify(result)}`, 
+//                 {
+//                   reply_markup: JSON.stringify({ remove_keyboard: true }),
+//                 });
+// 	console.log(form)
+// })
       //   $.sendMessage({
       //     text: 'Some sddfs...',
       //     reply_markup: JSON.stringify({
@@ -238,7 +251,7 @@ $.runForm(form, (result) => {
         let scope = $;
         $.runMenu({
             message: 'Welcome, my goal is to help you interprete keywords in your dream.\n\nPick from the MENU below to get started:',  
-            oneTimeKeyboard : true,
+            // oneTimeKeyboard : true,
             layout: 2,
             '💾 Save' : () => {this.saveHandler(scope)},
             '🔎 Search' : () => {
