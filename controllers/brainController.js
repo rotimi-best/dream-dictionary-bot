@@ -34,7 +34,7 @@ const stickers = {
     'thanksStickerLionKing' : 'CAADAgADqQIAAs-71A5iOMlYXuwndQI',
 }
 
-class BrainController extends TelegramBaseController{
+class BrainController extends TelegramBaseController {
 
     /**
      * @param {Scope} $
