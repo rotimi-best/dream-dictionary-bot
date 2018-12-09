@@ -34,7 +34,7 @@ const stickers = {
     'thanksStickerLionKing' : 'CAADAgADqQIAAs-71A5iOMlYXuwndQI',
 }
 
-class BrainController extends TelegramBaseController {
+class BrainController extends TelegramBaseController{
 
     /**
      * @param {Scope} $
@@ -157,6 +157,71 @@ class BrainController extends TelegramBaseController {
         let userId = $.message.chat.id;
         telegramBot.api.sendMessage(myChatId, `Someone needs help.\nUsername: ${user}\nUserId: ${userId}`)
     }
+  
+    testHandler($) {
+      const msg = $.message.text;
+      console.log(msg);
+      const form = {
+        name: {
+          q: 'Send me your name',
+          error: 'sorry, wrong input',
+          validator: (message, callback) => {
+            if(message.text) {
+              console.log(message.text); 
+              callback(true, message.text) //you must pass the result also
+              return
+            }
+
+            callback(false)
+          }
+        },
+        age: {
+          q: 'Send me your age',
+          error: 'sorry, wrong input',
+          keyboard: [
+            [{text: 'btn 1'}], [{text: 'btn 2'}]
+          ],
+          validator: (message, callback) => {
+            // console.log(message)
+            if (message.text && Number(message.text)) {
+              let answer = callback(true, Number(message.text))
+              console.log(answer)
+              return
+            }
+
+            callback(false)
+          }
+        }
+    }
+      
+    $.runMenu({
+        message: 'Select:',
+        options: {
+            parse_mode: 'Markdown' // in options field you can pass some additional data, like parse_mode
+        },
+        'Exit': {
+          message: 'Do you realy want to exit?',
+          resizeKeyboard: true,
+          'yes': () =>  { // remove keyboard when you send message
+                   $.sendMessage('Alright', { reply_markup: JSON.stringify({ remove_keyboard: true }) }) },
+          'no': () => { $.sendMessage('Exiting', { reply_markup: JSON.stringify({ remove_keyboard: true }) }) }
+        }
+    });
+// $.runForm(form, (result) => {
+//   $.sendMessage(`Thanks you for your answer ${JSON.stringify(result)}`, 
+//                 {
+//                   reply_markup: JSON.stringify({ remove_keyboard: true }),
+//                 });
+// 	console.log(form)
+// })
+      //   $.sendMessage({
+      //     text: 'Some sddfs...',
+      //     reply_markup: JSON.stringify({
+      //         'one_time_keyboard' : true
+      //     })
+      // });
+    }
+      
 
     /**
      * @param {Scope} $
@@ -185,9 +250,9 @@ class BrainController extends TelegramBaseController {
     startHandler($) {
         let scope = $;
         $.runMenu({
-            message: 'Welcome, my goal is to help you interprete keywords in your dream.\n\nPick from the MENU below to get started:',
+            message: 'Welcome, my goal is to help you interprete keywords in your dream.\n\nPick from the MENU below to get started:',  
+            // oneTimeKeyboard : true,
             layout: 2,
-            oneTimeKeyboard : 'true',
             '💾 Save' : () => {this.saveHandler(scope)},
             '🔎 Search' : () => {
                 let text = '🔎 Search';
@@ -204,9 +269,8 @@ class BrainController extends TelegramBaseController {
             '📚 Synonym' : () => {
                 let text = '📚 Synonym'
                 dictionary.synonymHandler(scope, text)
-            },
-            '🔑 Help' : () => {this.helpHandler(scope)},  
-            '🗣👂 Feedback' : () => {this.feedbackHandler(scope)},           
+            }, 
+            '🗣👂 Feedback' : () => {this.feedbackHandler(scope)}, 
         })
         //$.sendMessage(`To get started *click the backslash* on the _top right of your keyboard_ ( it looks like this / ).\nThere you would see the list of commands available for you to use.\nClick on /help to see examples of how to use those commands.`, { parse_mode: "Markdown"})
         let user = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
@@ -222,12 +286,12 @@ class BrainController extends TelegramBaseController {
         return serialized;
     }
 
-    findWordLogic($, msg, user, userId){
+    findWordLogic($, msg, user, userId) {
         let found = false
         let matched, page, input
         let numErr = false
         if(isNaN(msg)){
-            console.log('not a number', msg);
+            //console.log('not a number', msg);
             input = msg.trim().replace(/ /g, '');
             let firstLetter = input.match(/\w/);
             if(firstLetter){
@@ -323,6 +387,7 @@ class BrainController extends TelegramBaseController {
             'alphSearchCommand' : 'alphSearchHandler',
             'helpCommand' : 'helpHandler',
             'startCommand' : 'startHandler',
+            'testCommand' : 'testHandler',
             'feedbackCommand' : 'feedbackHandler',
         }
     }
