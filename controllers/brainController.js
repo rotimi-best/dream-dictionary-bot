@@ -60,7 +60,6 @@ class BrainController extends TelegramBaseController {
    * @param {Scope} $
    */
   wordSearchHandler($, text) {
-    // $.sendMessage('I am here to help you.')
     let user = $.message.chat.firstName
       ? $.message.chat.firstName
       : $.message.chat.lastName;
@@ -468,7 +467,27 @@ class BrainController extends TelegramBaseController {
       if (suggestions.length) {
         suggest = `\n\nDid you mean any of these: ${suggestions.join(", ")}?`;
       }
+      $.runInlineMenu({
+        layout: 1,
+        method: "sendMessage",
+        params: [
+          `Sorry ${user} ${emojis.sad}, ${input} wasn't found.${suggest}`
+        ],
+        menu: [
+          {
+            text: "Try Again",
+            callback: query => {
+              const { id } = query;
 
+              bot.api.answerCallbackQuery(id, {
+                text: "Lets go"
+              });
+
+              this.wordSearchHandler($, "🔎 Search");
+            }
+          }
+        ]
+      });
       $.sendMessage(
         `Sorry ${user} ${emojis.sad}, ${input} wasn't found.${suggest}`
       );
