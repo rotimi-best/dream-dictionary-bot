@@ -429,9 +429,7 @@ class BrainController extends TelegramBaseController {
       }, there is an interpretation for ${matched.charAt(0).toUpperCase() +
         matched.slice(1)}. \n\nHere you go..`;
 
-      const btnText = "Search Again";
-
-      this.searchAgain($, qa, btnText);
+      $.sendMessage(qa);
 
       bot.api.sendMessage(myChatId, `User ${user} searched for ${matched}`);
 
@@ -442,6 +440,12 @@ class BrainController extends TelegramBaseController {
       } else {
         this.sendImage($, msg, user, userId, page, matched);
       }
+
+      const btnText = "Search Again";
+
+      setTimeout(() => {
+        this.searchAgain($, "What do you want to do next?", btnText);
+      }, 200);
     } else if (!found && !numErr) {
       bot.api.sendMessage(
         myChatId,
