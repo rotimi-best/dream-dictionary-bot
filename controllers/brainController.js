@@ -9,6 +9,7 @@ const DictionaryController = require("./dictionaryController");
 let dictionary = new DictionaryController();
 
 const { ALPHABETS } = require("../helpers/constants");
+const { editWordOrPageQA } = require("../modules");
 const bot = require("../index.js");
 
 const myChatId = "380473669";
@@ -75,15 +76,18 @@ class BrainController extends TelegramBaseController {
           {
             text: "Word",
             callback: query => {
-              bot.api.answerCallbackQuery(query.id, {
-                text: "Okay :)"
-              });
-              scope.sendMessage(
-                `*Which *WORD* are you looking for?*\n\nSend me, I am waiting...${
-                  emojis.smile
-                }`,
-                { parse_mode: "Markdown" }
-              );
+              // bot.api.answerCallbackQuery(id, {
+              //   text: "Okay :)"
+              // });
+
+              editWordOrPageQA(bot, "WORD", query);
+
+              // scope.sendMessage(
+              //   `*Which *WORD* are you looking for?*\n\nSend me, I am waiting...${
+              //     emojis.smile
+              //   }`,
+              //   { parse_mode: "Markdown" }
+              // );
               scope.waitForRequest.then($ => {
                 const userReply = $.message.text.toLowerCase();
 
@@ -465,7 +469,9 @@ class BrainController extends TelegramBaseController {
       let suggest = "";
 
       if (suggestions.length) {
-        suggest = `\n\nDid you mean any of these: ${suggestions.join(", ")}?`;
+        suggest = `\n\nDid you mean ${
+          suggestions.length === 1 ? "" : "any of these: "
+        }${suggestions.join(", ")}?`;
       }
       $.runInlineMenu({
         layout: 1,

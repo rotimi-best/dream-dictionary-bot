@@ -19,6 +19,24 @@ const findByAlphMenu = menuArgs => {
   return menu;
 };
 
+const editWordOrPageQA = (bot, questionCategory, callbackQuery) => {
+  const { id, message } = callbackQuery;
+
+  bot.api.answerCallbackQuery(id, {
+    text: "Okay :)"
+  });
+
+  bot.api.editMessageText(
+    `*Which *${questionCategory}* are you looking for?*\n\nSend me, I am waiting...`,
+    {
+      parse_mode: "Markdown",
+      chat_id: message.chat.id,
+      message_id: message.messageId
+    }
+  );
+};
+
 module.exports = {
-  findByAlphMenu
+  findByAlphMenu,
+  editWordOrPageQA
 };
