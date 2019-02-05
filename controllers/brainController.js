@@ -161,7 +161,7 @@ class BrainController extends TelegramBaseController {
     if (msg == "🔎 Find By Alphabet 🔤") {
       const scope = $;
       const menuArgs = [
-        ALPHABETS,
+        ALPHABETS.UPPERCASE,
         bot,
         this.findAlphabetLogic,
         scope,
