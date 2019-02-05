@@ -76,18 +76,8 @@ class BrainController extends TelegramBaseController {
           {
             text: "Word",
             callback: query => {
-              // bot.api.answerCallbackQuery(id, {
-              //   text: "Okay :)"
-              // });
-
               editWordOrPageQA(bot, "WORD", query);
 
-              // scope.sendMessage(
-              //   `*Which *WORD* are you looking for?*\n\nSend me, I am waiting...${
-              //     emojis.smile
-              //   }`,
-              //   { parse_mode: "Markdown" }
-              // );
               scope.waitForRequest.then($ => {
                 const userReply = $.message.text.toLowerCase();
 
@@ -110,16 +100,8 @@ class BrainController extends TelegramBaseController {
           {
             text: "Page",
             callback: query => {
-              bot.api.answerCallbackQuery(query.id, {
-                text: "Okay :)"
-              });
+              editWordOrPageQA(bot, "PAGE", query);
 
-              scope.sendMessage(
-                `*Which *PAGE* are you looking for?*\n\nSend me, I am waiting...${
-                  emojis.smile
-                }`,
-                { parse_mode: "Markdown" }
-              );
               scope.waitForRequest.then($ => {
                 const userReply = $.message.text.toLowerCase();
                 if (userReply) {
@@ -442,17 +424,17 @@ class BrainController extends TelegramBaseController {
     }
 
     if (found) {
-      $.sendMessage(
-        `Hurray ${
-          emojis.success
-        }, there is an interpretation for ${matched.charAt(0).toUpperCase() +
-          matched.slice(1)}. \n\nHere you go..`
-      );
-      //$.sendMessage(`Hurray ${emojis.success}, the word ${matched.charAt(0).toUpperCase() + matched.slice(1)} was found in page ${page}`)
-      bot.api.sendMessage(
-        myChatId,
-        `User ${user} used the wordSearchHandler and searched for ${matched}`
-      );
+      const qa = `Hurray ${
+        emojis.success
+      }, there is an interpretation for ${matched.charAt(0).toUpperCase() +
+        matched.slice(1)}. \n\nHere you go..`;
+
+      const btnText = "Search Again";
+
+      this.searchAgain($, qa, btnText);
+
+      bot.api.sendMessage(myChatId, `User ${user} searched for ${matched}`);
+
       if (Array.isArray(page)) {
         page.forEach(pageElement => {
           this.sendImage($, msg, user, userId, pageElement);
@@ -463,7 +445,7 @@ class BrainController extends TelegramBaseController {
     } else if (!found && !numErr) {
       bot.api.sendMessage(
         myChatId,
-        `NotFoundError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
+        `404\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
       );
 
       let suggest = "";
@@ -473,35 +455,44 @@ class BrainController extends TelegramBaseController {
           suggestions.length === 1 ? "" : "any of these: "
         }${suggestions.join(", ")}?`;
       }
-      $.runInlineMenu({
-        layout: 1,
-        method: "sendMessage",
-        params: [
-          `Sorry ${user} ${emojis.sad}, ${input} wasn't found.${suggest}`
-        ],
-        menu: [
-          {
-            text: "Try Again",
-            callback: query => {
-              const { id } = query;
 
-              bot.api.answerCallbackQuery(id, {
-                text: "Lets go"
-              });
+      const qa = `Sorry ${user} ${
+        emojis.sad
+      }, ${input} wasn't found.${suggest}`;
+      const btnText = "Try Again";
 
-              this.wordSearchHandler($, "🔎 Search");
-            }
-          }
-        ]
-      });
+      this.searchAgain($, qa, btnText);
     }
+  }
+
+  searchAgain($, question, btnText) {
+    $.runInlineMenu({
+      layout: 1,
+      method: "sendMessage",
+      params: [question],
+      menu: [
+        {
+          text: btnText,
+          callback: query => {
+            const { id } = query;
+
+            bot.api.answerCallbackQuery(id, {
+              text: "Lets go"
+            });
+
+            this.wordSearchHandler($, "🔎 Search");
+          }
+        }
+      ]
+    });
   }
 
   // Send images for a particular page in the dream dictionary
   sendImage($, msg, user, userId, page, matched) {
-    let imagesFile = fs.readFileSync("variables/images.json", "utf8");
-    let jsonImages = JSON.parse(imagesFile);
-    let image = jsonImages.images[page];
+    const imagesFile = fs.readFileSync("variables/images.json", "utf8");
+    const jsonImages = JSON.parse(imagesFile);
+    const image = jsonImages.images[page];
+
     if (image) {
       const send = $.sendPhoto(image);
       send.catch(error => {
