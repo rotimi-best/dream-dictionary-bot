@@ -256,19 +256,6 @@ class BrainController extends TelegramBaseController {
         }
       }
     });
-    // $.runForm(form, (result) => {
-    //   $.sendMessage(`Thanks you for your answer ${JSON.stringify(result)}`,
-    //                 {
-    //                   reply_markup: JSON.stringify({ remove_keyboard: true }),
-    //                 });
-    // 	console.log(form)
-    // })
-    //   $.sendMessage({
-    //     text: 'Some sddfs...',
-    //     reply_markup: JSON.stringify({
-    //         'one_time_keyboard' : true
-    //     })
-    // });
   }
 
   /**
@@ -381,7 +368,10 @@ class BrainController extends TelegramBaseController {
 
     // This means the user is searching for a word
     if (isNaN(msg)) {
-      input = msg.trim().replace(/ /g, "");
+      input = msg
+        .trim()
+        .replace(/ /g, "")
+        .toLowerCase();
       const firstLetter = input.match(/\w/);
 
       if (firstLetter) {
@@ -473,9 +463,15 @@ class BrainController extends TelegramBaseController {
         `NotFoundError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
       );
 
-      console.log("suggestions", suggestions);
+      let suggest = "";
 
-      $.sendMessage(`Sorry ${user} ${emojis.sad}, ${input} wasn't found. `);
+      if (suggestions.length) {
+        suggest = `\n\nDid you mean any of these: ${suggestions.join(", ")}?`;
+      }
+
+      $.sendMessage(
+        `Sorry ${user} ${emojis.sad}, ${input} wasn't found.${suggest}`
+      );
     }
   }
 
