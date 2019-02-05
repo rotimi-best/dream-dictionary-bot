@@ -518,7 +518,7 @@ class BrainController extends TelegramBaseController {
         text: alphabet,
         callback: query => {
           bot.api.answerCallbackQuery(query.id, {
-            text: "Searching......"
+            text: "Here you go :)"
           });
           this.findAlphabetLogic(scope, alphabet, user, userId);
         }
