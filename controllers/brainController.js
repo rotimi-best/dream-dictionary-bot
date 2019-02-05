@@ -86,9 +86,10 @@ class BrainController extends TelegramBaseController {
                 { parse_mode: "Markdown" }
               );
               scope.waitForRequest.then($ => {
-                let val = $.message.text;
-                if (val) {
-                  this.findWordLogic($, val, user, userId);
+                const userReply = $.message.text;
+
+                if (userReply) {
+                  this.findWordLogic($, userReply, user, userId);
                 } else {
                   $.sendMessage(
                     `Sorry ${user} ${
@@ -117,9 +118,9 @@ class BrainController extends TelegramBaseController {
                 { parse_mode: "Markdown" }
               );
               scope.waitForRequest.then($ => {
-                let val = $.message.text;
-                if (val) {
-                  this.findWordLogic($, val, user, userId);
+                const userReply = $.message.text;
+                if (userReply) {
+                  this.findWordLogic($, userReply, user, userId);
                 } else {
                   $.sendMessage(
                     `Sorry ${user} ${
@@ -348,7 +349,7 @@ class BrainController extends TelegramBaseController {
 
   _serializeList(user, words, pages) {
     const messages = [];
-    const nextBatch = true;
+    let nextBatch = true;
     const exclusions = [0, 1, 2, 18];
     let serialized = `*Here You Go ${user} ${emojis.smile}*\n`;
 
@@ -371,24 +372,37 @@ class BrainController extends TelegramBaseController {
 
   findWordLogic($, msg, user, userId) {
     let found = false;
-    let matched, page, input;
+    let words,
+      matched,
+      page,
+      input,
+      suggestions = [];
     let numErr = false;
+
+    // This means the user is searching for a word
     if (isNaN(msg)) {
-      //console.log('not a number', msg);
       input = msg.trim().replace(/ /g, "");
-      let firstLetter = input.match(/\w/);
+      const firstLetter = input.match(/\w/);
+
       if (firstLetter) {
         lib.arr.forEach(element => {
           let alphabet = element.container.alph;
+
           if (alphabet == firstLetter["0"].toLowerCase()) {
-            let words = element.container.words;
-            words.forEach((el, index) => {
-              let reg = new RegExp("\\b" + input + "\\b", "gi");
-              let matchWord = el.match(reg);
+            words = element.container.words;
+
+            words.forEach((word, index) => {
+              const reg = new RegExp("\\b" + input + "\\b", "gi");
+              const matchWord = word.match(reg);
+
               if (matchWord) {
                 found = true;
                 matched = matchWord["0"];
                 page = element.container.pages[index];
+              }
+
+              if (word.includes(input)) {
+                suggestions.push(word);
               }
             });
           }
@@ -404,7 +418,8 @@ class BrainController extends TelegramBaseController {
           `NotEnglishError =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
         );
       }
-    } else {
+    } // This means the user is searching for a page
+    else {
       if (msg >= 19 && msg <= 826) {
         found = true;
         page = msg;
@@ -445,11 +460,10 @@ class BrainController extends TelegramBaseController {
         myChatId,
         `NotFoundError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
       );
-      $.sendMessage(
-        `Sorry ${user} ${
-          emojis.sad
-        }, ${input} wasn't found.\n\nTry adding/removing (s) at the end of the word or check your spelling by using the SpellChecker in the menu.`
-      );
+
+      console.log("suggestions", suggestions);
+
+      $.sendMessage(`Sorry ${user} ${emojis.sad}, ${input} wasn't found. `);
     }
   }
 
