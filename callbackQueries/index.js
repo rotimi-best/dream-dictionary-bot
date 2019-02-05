@@ -1,5 +1,5 @@
 const { TelegramBaseCallbackQueryController } = require("telegram-node-bot");
-const bot = require("../helpers/botConnection").get();
+const bot = require("../index.js");
 
 class CallbackQueryController extends TelegramBaseCallbackQueryController {
   async handle(query) {

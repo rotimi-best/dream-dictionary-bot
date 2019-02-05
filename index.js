@@ -21,6 +21,7 @@ const DictionaryController = require("./controllers/dictionaryController");
 const CallbackQueryController = require("./callbackQueries");
 
 bot.router.callbackQuery(new CallbackQueryController());
+
 bot.router
   .when(new TextCommand("💾 Save", "saveCommand"), new BrainController())
   .when(
