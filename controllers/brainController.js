@@ -8,7 +8,6 @@ const lib = require("../text/libArray");
 const DictionaryController = require("./dictionaryController");
 let dictionary = new DictionaryController();
 
-const { findByAlphMenu } = require("../modules");
 const { ALPHABETS } = require("../helpers/constants");
 const bot = require("../index.js");
 
@@ -160,15 +159,8 @@ class BrainController extends TelegramBaseController {
 
     if (msg == "🔎 Find By Alphabet 🔤") {
       const scope = $;
-      const menuArgs = [
-        ALPHABETS.UPPERCASE,
-        bot,
-        this.findAlphabetLogic,
-        scope,
-        user,
-        userId
-      ];
-      const menu = findByAlphMenu(menuArgs);
+      const menuArgs = [scope, user, userId];
+      const menu = this.findByAlphMenu(menuArgs);
 
       $.runInlineMenu({
         layout: 4,
@@ -515,6 +507,27 @@ class BrainController extends TelegramBaseController {
         `NotFoundError[/findbyalpahbet] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
       );
     }
+  }
+
+  findByAlphMenu(menuArgs) {
+    const [scope, user, userId] = menuArgs;
+    const menu = [];
+
+    for (const alphabet of ALPHABETS.UPPERCASE) {
+      const option = {
+        text: alphabet,
+        callback: query => {
+          bot.api.answerCallbackQuery(query.id, {
+            text: "Searching......"
+          });
+          this.findAlphabetLogic(scope, alphabet, user, userId);
+        }
+      };
+
+      menu.push(option);
+    }
+
+    return menu;
   }
 
   get routes() {
