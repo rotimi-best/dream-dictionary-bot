@@ -1,4 +1,4 @@
-function findByAlphMenu(menuArgs) {
+const findByAlphMenu = menuArgs => {
   const [alphabets, bot, callback, scope, user, userId] = menuArgs;
   const menu = [];
 
@@ -17,8 +17,8 @@ function findByAlphMenu(menuArgs) {
   }
 
   return menu;
-}
+};
 
-module.export = {
+module.exports = {
   findByAlphMenu
 };

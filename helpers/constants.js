@@ -1,4 +1,4 @@
-module.export = {
+module.exports = {
   ALPHABETS: {
     UPPERCASE: [
       "A",
