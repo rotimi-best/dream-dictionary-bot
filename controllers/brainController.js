@@ -379,9 +379,9 @@ class BrainController extends TelegramBaseController {
 
           if (alphabet == firstLetter) {
             words = element.container.words;
-            const foundAll = [];
 
             words.forEach((word, index) => {
+              const foundAll = [];
               const reg = new RegExp("\\b" + input + "\\b", "gi");
               const matchWord = word.match(reg);
 
@@ -401,11 +401,11 @@ class BrainController extends TelegramBaseController {
                   foundAll.push(0);
                 }
               }
-            });
 
-            if (!foundAll.includes(0)) {
-              suggestions.push(option);
-            }
+              if (!foundAll.includes(0)) {
+                suggestions.push(word);
+              }
+            });
           }
         });
       } else {
@@ -488,9 +488,6 @@ class BrainController extends TelegramBaseController {
           }
         ]
       });
-      $.sendMessage(
-        `Sorry ${user} ${emojis.sad}, ${input} wasn't found.${suggest}`
-      );
     }
   }
 
