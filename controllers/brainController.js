@@ -347,13 +347,26 @@ class BrainController extends TelegramBaseController {
   }
 
   _serializeList(user, words, pages) {
+    const messages = [];
+    const nextBatch = true;
+    const exclusions = [0, 1, 2, 18];
     let serialized = `*Here You Go ${user} ${emojis.smile}*\n`;
+
     words.forEach((word, index) => {
+      if (exclusions.includes(index) && nextBatch) {
+        messages.push(serialized);
+        serialized = "";
+        nextBatch = false;
+      }
+
       serialized += `${word.charAt(0).toUpperCase() + word.slice(1)} (pg. ${
         pages[index]
       }) \n`;
     });
-    return serialized;
+
+    messages.push(serialized);
+
+    return messages;
   }
 
   findWordLogic($, msg, user, userId) {
@@ -478,7 +491,7 @@ class BrainController extends TelegramBaseController {
     }
   }
 
-  findAlphabetLogic($, msg, user, userId, editMsgId) {
+  findAlphabetLogic($, msg, user, userId, editMsgId, chat_id) {
     let input = msg.toLowerCase();
     let checker = false;
     lib.arr.forEach(element => {
@@ -488,10 +501,19 @@ class BrainController extends TelegramBaseController {
         let pages = element.container.pages;
         checker = true;
 
-        bot.api.editMessageText(this._serializeList(user, words, pages), {
+        const [msg1, msg2 = ""] = this._serializeList(user, words, pages);
+
+        bot.api.editMessageText(msg1, {
           parse_mode: "Markdown",
+          chat_id,
           message_id: editMsgId
         });
+
+        if (msg2.length) {
+          setTimeout(() => {
+            $.sendMessage(msg2, { parse_mode: "Markdown" });
+          }, 200);
+        }
 
         bot.api.sendMessage(
           myChatId,
@@ -520,13 +542,23 @@ class BrainController extends TelegramBaseController {
       const option = {
         text: alphabet,
         callback: query => {
-          const { messageId } = query;
+          const {
+            id,
+            message: { messageId, chat }
+          } = query;
 
-          bot.api.answerCallbackQuery(query.id, {
+          bot.api.answerCallbackQuery(id, {
             text: "Here you go :)"
           });
 
-          this.findAlphabetLogic(scope, alphabet, user, userId, messageId);
+          this.findAlphabetLogic(
+            scope,
+            alphabet,
+            user,
+            userId,
+            messageId,
+            chat.id
+          );
         }
       };
 
