@@ -478,7 +478,7 @@ class BrainController extends TelegramBaseController {
     }
   }
 
-  findAlphabetLogic($, msg, user, userId) {
+  findAlphabetLogic($, msg, user, userId, editMsgId) {
     let input = msg.toLowerCase();
     let checker = false;
     lib.arr.forEach(element => {
@@ -487,9 +487,12 @@ class BrainController extends TelegramBaseController {
         let words = element.container.words;
         let pages = element.container.pages;
         checker = true;
-        $.sendMessage(this._serializeList(user, words, pages), {
-          parse_mode: "Markdown"
+
+        bot.api.editMessageText(this._serializeList(user, words, pages), {
+          parse_mode: "Markdown",
+          message_id: editMsgId
         });
+
         bot.api.sendMessage(
           myChatId,
           `User ${user} used the alphabetSearchHandler`
@@ -517,10 +520,13 @@ class BrainController extends TelegramBaseController {
       const option = {
         text: alphabet,
         callback: query => {
+          const { messageId } = query;
+
           bot.api.answerCallbackQuery(query.id, {
             text: "Here you go :)"
           });
-          this.findAlphabetLogic(scope, alphabet, user, userId);
+
+          this.findAlphabetLogic(scope, alphabet, user, userId, messageId);
         }
       };
 

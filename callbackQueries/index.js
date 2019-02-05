@@ -14,7 +14,7 @@ class CallbackQueryController extends TelegramBaseCallbackQueryController {
     }
 
     bot.api.answerCallbackQuery(query.id, {
-      text: `No longer active`
+      text: `Buttton no longer active`
     });
   }
 }
