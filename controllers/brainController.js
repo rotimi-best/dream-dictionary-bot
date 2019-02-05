@@ -86,7 +86,7 @@ class BrainController extends TelegramBaseController {
                 { parse_mode: "Markdown" }
               );
               scope.waitForRequest.then($ => {
-                const userReply = $.message.text;
+                const userReply = $.message.text.toLowerCase();
 
                 if (userReply) {
                   this.findWordLogic($, userReply, user, userId);
@@ -118,7 +118,7 @@ class BrainController extends TelegramBaseController {
                 { parse_mode: "Markdown" }
               );
               scope.waitForRequest.then($ => {
-                const userReply = $.message.text;
+                const userReply = $.message.text.toLowerCase();
                 if (userReply) {
                   this.findWordLogic($, userReply, user, userId);
                 } else {
@@ -388,8 +388,9 @@ class BrainController extends TelegramBaseController {
         lib.arr.forEach(element => {
           let alphabet = element.container.alph;
 
-          if (alphabet == firstLetter["0"].toLowerCase()) {
+          if (alphabet == firstLetter) {
             words = element.container.words;
+            const foundAll = [];
 
             words.forEach((word, index) => {
               const reg = new RegExp("\\b" + input + "\\b", "gi");
@@ -401,10 +402,21 @@ class BrainController extends TelegramBaseController {
                 page = element.container.pages[index];
               }
 
-              if (word.includes(input)) {
-                suggestions.push(word);
+              for (let i in input) {
+                const iLetter = input[i];
+                const wLetter = word[i];
+
+                if (iLetter === wLetter) {
+                  foundAll.push(1);
+                } else {
+                  foundAll.push(0);
+                }
               }
             });
+
+            if (!foundAll.includes(0)) {
+              suggestions.push(option);
+            }
           }
         });
       } else {
