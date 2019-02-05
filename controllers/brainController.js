@@ -247,9 +247,7 @@ class BrainController extends TelegramBaseController {
    * @param {Scope} $
    */
   feedbackHandler($) {
-    let user = $.message.chat.firstName
-      ? $.message.chat.firstName
-      : $.message.chat.lastName;
+    let user = $.message.chat.firstName || $.message.chat.lastName;
     let userId = $.message.chat.id;
     $.sendMessage(
       `Tell me how you want me to serve you better. ${emojis.smile}`,
@@ -445,7 +443,7 @@ class BrainController extends TelegramBaseController {
 
       setTimeout(() => {
         this.searchAgain($, "What do you want to do next?", btnText);
-      }, 200);
+      }, 1000);
     } else if (!found && !numErr) {
       bot.api.sendMessage(
         myChatId,
@@ -485,6 +483,18 @@ class BrainController extends TelegramBaseController {
             });
 
             this.wordSearchHandler($, "🔎 Search");
+          }
+        },
+        {
+          text: "Feedback",
+          callback: query => {
+            const { id } = query;
+
+            bot.api.answerCallbackQuery(id, {
+              text: "Thank you"
+            });
+
+            this.feedbackHandler($);
           }
         }
       ]
