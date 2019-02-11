@@ -480,6 +480,7 @@ class BrainController extends TelegramBaseController {
         `404\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
       );
 
+      let btnText = "Try Again";
       let suggest = "";
       let keyword;
 
@@ -489,13 +490,12 @@ class BrainController extends TelegramBaseController {
         }${suggestions.join(", ")}?`;
 
         keyword = suggestions[0];
+        btnText = `Search for ${keyword}`;
       }
 
       const question = `Sorry ${user} ${
         emojis.sad
       }, ${input} wasn't found.${suggest}`;
-
-      const btnText = keyword ? "Try Again" : `Search for ${keyword}`;
 
       this.searchAgain($, question, btnText, keyword);
     }
