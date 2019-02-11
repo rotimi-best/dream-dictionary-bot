@@ -3,7 +3,7 @@ const bot = require("../index.js");
 
 class CallbackQueryController extends TelegramBaseCallbackQueryController {
   async handle(query) {
-    console.log(query.data);
+    // console.log(query.data);
 
     switch (query.data) {
       case "111":
@@ -14,7 +14,7 @@ class CallbackQueryController extends TelegramBaseCallbackQueryController {
     }
 
     bot.api.answerCallbackQuery(query.id, {
-      text: `Buttton no longer active`
+      text: `Session expired, use the main menu`
     });
   }
 }
