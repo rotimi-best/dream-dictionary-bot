@@ -441,9 +441,11 @@ class BrainController extends TelegramBaseController {
         matched = `Page ${page}`;
       } else {
         numErr = true;
+
         $.sendMessage(
           `Sorry ${user} ${emojis.sad}, such page isn't in the dictionary`
         );
+
         bot.api.sendMessage(
           myChatId,
           `NotEnglishError =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
@@ -452,12 +454,12 @@ class BrainController extends TelegramBaseController {
     }
 
     if (found) {
-      const qa = `Hurray ${
+      const question = `Hurray ${
         emojis.success
       }, there is an interpretation for ${matched.charAt(0).toUpperCase() +
         matched.slice(1)}. \n\nHere you go..`;
 
-      $.sendMessage(qa);
+      $.sendMessage(question);
 
       bot.api.sendMessage(myChatId, `User ${user} searched for ${matched}`);
 
@@ -473,7 +475,7 @@ class BrainController extends TelegramBaseController {
 
       setTimeout(() => {
         this.searchAgain($, "What do you want to do next?", btnText);
-      }, 1000);
+      }, 2000);
     } else if (!found && !numErr) {
       bot.api.sendMessage(
         myChatId,
