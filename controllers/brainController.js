@@ -60,13 +60,14 @@ class BrainController extends TelegramBaseController {
   /**
    * @param {Scope} $
    */
-  wordSearchHandler($, text) {
-    let user = $.message.chat.firstName
-      ? $.message.chat.firstName
-      : $.message.chat.lastName;
-    let userId = $.message.chat.id;
-    let msg = text ? text : $.message.text;
-    if (msg == "🔎 Search") {
+  wordSearchHandler($, command, keyword) {
+    const user = $.message.chat.firstName || $.message.chat.lastName;
+    const userId = $.message.chat.id;
+    const clickedCommand = command || $.message.text;
+
+    if (clickedCommand == "🔎 Search" && keyword) {
+      this.findWordLogic($, keyword, user, userId);
+    } else if (clickedCommand == "🔎 Search") {
       let scope = $;
       $.runInlineMenu({
         layout: 2,
@@ -130,7 +131,7 @@ class BrainController extends TelegramBaseController {
       );
       bot.api.sendMessage(
         myChatId,
-        `InvalidInputError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
+        `InvalidInputError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${clickedCommand}`
       );
     }
   }
@@ -480,23 +481,27 @@ class BrainController extends TelegramBaseController {
       );
 
       let suggest = "";
+      let keyword;
 
       if (suggestions.length) {
         suggest = `\n\nDid you mean ${
           suggestions.length === 1 ? "" : "any of these: "
         }${suggestions.join(", ")}?`;
+
+        keyword = suggestions[0];
       }
 
-      const qa = `Sorry ${user} ${
+      const question = `Sorry ${user} ${
         emojis.sad
       }, ${input} wasn't found.${suggest}`;
-      const btnText = "Try Again";
 
-      this.searchAgain($, qa, btnText);
+      const btnText = keyword ? "Try Again" : `Search for ${keyword}`;
+
+      this.searchAgain($, question, btnText, keyword);
     }
   }
 
-  searchAgain($, question, btnText) {
+  searchAgain($, question, btnText, keyword = "") {
     $.runInlineMenu({
       layout: 1,
       method: "sendMessage",
@@ -511,7 +516,7 @@ class BrainController extends TelegramBaseController {
               text: "Lets go"
             });
 
-            this.wordSearchHandler($, "🔎 Search");
+            this.wordSearchHandler($, "🔎 Search", keyword);
           }
         },
         {
