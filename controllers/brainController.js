@@ -11,8 +11,9 @@ let dictionary = new DictionaryController();
 const { ALPHABETS } = require("../helpers/constants");
 const { editWordOrPageQA } = require("../modules");
 const bot = require("../index.js");
+const { api: API } = bot;
 
-const { ADMIN_CHAT_ID } = process.env;
+const { ADMIN } = process.env;
 
 const emojis = {
   success: "🕺",
@@ -51,8 +52,8 @@ class BrainController extends TelegramBaseController {
       ? $.message.chat.firstName
       : $.message.chat.lastName;
     let userId = $.message.chat.id;
-    bot.api.sendMessage(
-      ADMIN_CHAT_ID,
+    API.sendMessage(
+      ADMIN,
       `Someone tried to save his dream\n\nUsername: ${user}\nUserId: ${userId}`
     );
   }
@@ -90,8 +91,8 @@ class BrainController extends TelegramBaseController {
                       emojis.sad
                     }, your input isn't valid. click /help for more info.`
                   );
-                  bot.api.sendMessage(
-                    ADMIN_CHAT_ID,
+                  API.sendMessage(
+                    ADMIN,
                     `InvalidInputError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: Invalid input`
                   );
                 }
@@ -113,8 +114,8 @@ class BrainController extends TelegramBaseController {
                       emojis.sad
                     }, your input isn't valid. click /help for more info.`
                   );
-                  bot.api.sendMessage(
-                    ADMIN_CHAT_ID,
+                  API.sendMessage(
+                    ADMIN,
                     `InvalidInputError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: Invalid input`
                   );
                 }
@@ -129,8 +130,8 @@ class BrainController extends TelegramBaseController {
           emojis.sad
         }, your input isn't valid. click /help for more info.`
       );
-      bot.api.sendMessage(
-        ADMIN_CHAT_ID,
+      API.sendMessage(
+        ADMIN,
         `InvalidInputError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${clickedCommand}`
       );
     }
@@ -161,8 +162,8 @@ class BrainController extends TelegramBaseController {
           emojis.sad
         }, your input isn't valid. click /help for more info.`
       );
-      bot.api.sendMessage(
-        ADMIN_CHAT_ID,
+      API.sendMessage(
+        ADMIN,
         `InvalidInputError[/findbyalpahbet] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
       );
     }
@@ -179,8 +180,8 @@ class BrainController extends TelegramBaseController {
     );
     let user = $.message.chat.firstName || $.message.chat.lastName;
     let userId = $.message.chat.id;
-    bot.api.sendMessage(
-      ADMIN_CHAT_ID,
+    API.sendMessage(
+      ADMIN,
       `Someone needs help.\nUsername: ${user}\nUserId: ${userId}`
     );
   }
@@ -286,7 +287,7 @@ class BrainController extends TelegramBaseController {
     $.waitForRequest.then($ => {
       let val = $.message.text;
       if (val) {
-        bot.api.sendMessage(ADMIN_CHAT_ID, `Feedback from ${user}\n\n ${val}`);
+        API.sendMessage(ADMIN, `Feedback from ${user}\n\n ${val}`);
         $.sendMessage(`Thanks for your feedback, it is really appreciated`);
         $.sendSticker(stickers.thanksStickerLionKing);
       } else {
@@ -295,8 +296,8 @@ class BrainController extends TelegramBaseController {
             emojis.sad
           }, your input isn't valid. click /help for more info.`
         );
-        bot.api.sendMessage(
-          ADMIN_CHAT_ID,
+        API.sendMessage(
+          ADMIN,
           `InvalidInputError[feedbackHandler] =>\nUsername: ${user}\nUserId: ${userId}\nInput: Invalid input`
         );
       }
@@ -341,8 +342,8 @@ class BrainController extends TelegramBaseController {
       ? $.message.chat.firstName
       : $.message.chat.lastName;
     let userId = $.message.chat.id;
-    bot.api.sendMessage(
-      ADMIN_CHAT_ID,
+    API.sendMessage(
+      ADMIN,
       `You have a new user.\n\nUsername: ${user}\nUserId: ${userId}`
     );
   }
@@ -428,8 +429,8 @@ class BrainController extends TelegramBaseController {
             emojis.sad
           }, your input isn't valid. Make sure you entered an english word`
         );
-        bot.api.sendMessage(
-          ADMIN_CHAT_ID,
+        API.sendMessage(
+          ADMIN,
           `NotEnglishError =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
         );
       }
@@ -446,8 +447,8 @@ class BrainController extends TelegramBaseController {
           `Sorry ${user} ${emojis.sad}, such page isn't in the dictionary`
         );
 
-        bot.api.sendMessage(
-          ADMIN_CHAT_ID,
+        API.sendMessage(
+          ADMIN,
           `NotEnglishError =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
         );
       }
@@ -461,7 +462,7 @@ class BrainController extends TelegramBaseController {
 
       $.sendMessage(question);
 
-      bot.api.sendMessage(ADMIN_CHAT_ID, `User ${user} searched for ${matched}`);
+      API.sendMessage(ADMIN, `User ${user} searched for ${matched}`);
 
       if (Array.isArray(page)) {
         page.forEach(pageElement => {
@@ -477,8 +478,8 @@ class BrainController extends TelegramBaseController {
         this.searchAgain($, "What do you want to do next?", btnText);
       }, 2000);
     } else if (!found && !numErr) {
-      bot.api.sendMessage(
-        ADMIN_CHAT_ID,
+      API.sendMessage(
+        ADMIN,
         `404\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
       );
 
@@ -514,7 +515,7 @@ class BrainController extends TelegramBaseController {
           callback: query => {
             const { id } = query;
 
-            bot.api.answerCallbackQuery(id, {
+            API.answerCallbackQuery(id, {
               text: "Lets go"
             });
 
@@ -526,7 +527,7 @@ class BrainController extends TelegramBaseController {
           callback: query => {
             const { id } = query;
 
-            bot.api.answerCallbackQuery(id, {
+            API.answerCallbackQuery(id, {
               text: "Thank you"
             });
 
@@ -554,11 +555,11 @@ class BrainController extends TelegramBaseController {
             emojis.coolGlasses
           }`
         );
-        bot.api.sendMessage(
-          ADMIN_CHAT_ID,
+        API.sendMessage(
+          ADMIN,
           `ImageSendError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}\nPage: ${page}`
         );
-        bot.api.sendMessage(ADMIN_CHAT_ID, `Description => ${error.description}`);
+        API.sendMessage(ADMIN, `Description => ${error.description}`);
       });
     } else {
       $.sendMessage(
@@ -569,8 +570,8 @@ class BrainController extends TelegramBaseController {
           emojis.coolGlasses
         }`
       );
-      bot.api.sendMessage(
-        ADMIN_CHAT_ID,
+      API.sendMessage(
+        ADMIN,
         `ImageSendError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}\nPage: ${page}\nDescription => Cannot read property 'url' of undefined`
       );
     }
@@ -588,7 +589,7 @@ class BrainController extends TelegramBaseController {
 
         const [msg1, msg2 = ""] = this._serializeList(user, words, pages);
 
-        bot.api.editMessageText(msg1, {
+        API.editMessageText(msg1, {
           parse_mode: "Markdown",
           chat_id,
           message_id: editMsgId
@@ -600,10 +601,7 @@ class BrainController extends TelegramBaseController {
           }, 200);
         }
 
-        bot.api.sendMessage(
-          ADMIN_CHAT_ID,
-          `User ${user} used the alphabetSearchHandler`
-        );
+        API.sendMessage(ADMIN, `User ${user} used the alphabetSearchHandler`);
       }
     });
     if (!checker) {
@@ -612,8 +610,8 @@ class BrainController extends TelegramBaseController {
           emojis.sad
         }, Such alphabet doesn't exist, check your spelling`
       );
-      bot.api.sendMessage(
-        ADMIN_CHAT_ID,
+      API.sendMessage(
+        ADMIN,
         `NotFoundError[/findbyalpahbet] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
       );
     }
@@ -632,7 +630,7 @@ class BrainController extends TelegramBaseController {
             message: { messageId, chat }
           } = query;
 
-          bot.api.answerCallbackQuery(id, {
+          API.answerCallbackQuery(id, {
             text: "Here you go :)"
           });
 
