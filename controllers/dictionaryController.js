@@ -279,15 +279,15 @@ class DictionaryController extends TelegramBaseController {
       }\n\n`;
     }
     suggestions.forEach(suggestion => {
-      serialized += `${emojis.fingerRight} ${suggestion
+      serialized += `${emojis.fingerRight} /${suggestion
         .charAt(0)
         .toUpperCase() + suggestion.slice(1)}\n`;
     });
-    serialized += `\nTo find the meaning of any of the word:\n1. Opening the *MENU* (_The ICON on the top-right of your keyboard_),\n2. Click Search \n3. Enter any of the above suggestions: *${suggestions[
-      suggestions.length - 1
-    ]
-      .charAt(0)
-      .toUpperCase() + suggestions[suggestions.length - 1].slice(1)}*`;
+    // serialized += `\nTo find the meaning of any of the word:\n1. Opening the *MENU* (_The ICON on the top-right of your keyboard_),\n2. Click Search \n3. Enter any of the above suggestions: *${suggestions[
+    //   suggestions.length - 1
+    // ]
+    //   .charAt(0)
+    //   .toUpperCase() + suggestions[suggestions.length - 1].slice(1)}*`;
     return serialized;
   }
 }

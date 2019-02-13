@@ -20,6 +20,7 @@
     "got": "^7.1.0",
     "nspell": "^2.1.0",
     "telegram-node-bot": "^4.0.5",
+    "textract": "^2.4.0",
     "thesaurus-synonyms": "^2.1.3"
   }
 }

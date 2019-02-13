@@ -4,7 +4,6 @@
 const Telegram = require("telegram-node-bot");
 const { TextCommand, RegexpCommand } = Telegram;
 require("dotenv").config();
-const TextCommand = Telegram.TextCommand;
 
 const bot = new Telegram.Telegram(process.env.API_KEY, {
   workers: 1,
