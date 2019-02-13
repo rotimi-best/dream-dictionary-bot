@@ -2,6 +2,7 @@
 
 // Dream dictionary bot
 const Telegram = require("telegram-node-bot");
+const { TextCommand, RegexpCommand } = Telegram;
 require("dotenv").config();
 const TextCommand = Telegram.TextCommand;
 
@@ -29,8 +30,8 @@ bot.router
     new BrainController()
   )
   .when(
-    new RegexpCommand(/\/[a-z A-Z]/, "wordSearchCommand"),
-    new DictionaryController()
+    new RegexpCommand(/\/[a-z A-Z]+/, "wordSearchCommand"),
+    new BrainController()
   )
   .when(
     new TextCommand("🔎 Find By Alphabet 🔤", "alphSearchCommand"),

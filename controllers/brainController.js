@@ -365,7 +365,7 @@ class BrainController extends TelegramBaseController {
         nextBatch = false;
       }
 
-      serialized += `${word.charAt(0).toUpperCase() + word.slice(1)} (pg. ${
+      serialized += `/${word.charAt(0).toUpperCase() + word.slice(1)} (pg. ${
         pages[index]
       }) \n`;
     });
