@@ -29,6 +29,10 @@ bot.router
     new BrainController()
   )
   .when(
+    new RegexpCommand(/\/[a-z A-Z]/, "wordSearchCommand"),
+    new DictionaryController()
+  )
+  .when(
     new TextCommand("🔎 Find By Alphabet 🔤", "alphSearchCommand"),
     new BrainController()
   )

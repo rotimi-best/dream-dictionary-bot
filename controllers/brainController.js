@@ -68,6 +68,10 @@ class BrainController extends TelegramBaseController {
 
     if (clickedCommand == "🔎 Search" && wordSuggestedByBot) {
       this.findWordLogic($, wordSuggestedByBot, user, userId);
+    } else if (clickedCommand.charAt(0) === "/") {
+      wordSuggestedByBot = clickedCommand.split("/")[1];
+
+      this.findWordLogic($, wordSuggestedByBot, user, userId);
     } else if (clickedCommand == "🔎 Search") {
       let scope = $;
       $.runInlineMenu({
