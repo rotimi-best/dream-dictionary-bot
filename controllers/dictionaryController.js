@@ -258,15 +258,15 @@ class DictionaryController extends TelegramBaseController {
 
   _serializeList(user, word, suggestions, func) {
     let serialized;
+
     if (func == "spellchecker") {
-      serialized = `Hey ${user}, the word ${word} is incorrect ${
-        emojis.sad
-      }. I've got some suggestions for you: ${emojis.oneEye}\n\n`;
-    } else if (func == "synonym") {
-      serialized = `Hey ${user}, here are some synonyms for you: ${
+      serialized = `The word ${word} is incorrect ${emojis.sad}. Suggestions: ${
         emojis.oneEye
-      }\n\n`;
+      }\n\n Click to find`;
+    } else if (func == "synonym") {
+      serialized = `Synonymns: ${emojis.oneEye}\n\n Click to find`;
     }
+
     suggestions.forEach(suggestion => {
       serialized += `${emojis.fingerRight} /${suggestion
         .charAt(0)
