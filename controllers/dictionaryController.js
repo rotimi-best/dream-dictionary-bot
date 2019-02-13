@@ -67,9 +67,9 @@ class DictionaryController extends TelegramBaseController {
           );
         }
       });
-    } else if (word.length > 1 && word.match(/[a-z]/i)) {
+    } else if (msg.length > 1 && msg.match(/[a-z]/i)) {
       //Logic to suggest
-      this.spellCheckerLogic($, word, user, userId);
+      this.spellCheckerLogic($, msg, user, userId);
     } else {
       //Sorry your word is invalid
       $.sendMessage(
