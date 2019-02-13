@@ -24,7 +24,7 @@ class OtherwiseController extends BaseController {
       `To search for a word, e.g Bag\n\n1. Open *MENU* (_The ICON on the top-right of your keyboard_)\n2. Click 🔎 Search\n3. Enter the *WORD* you are looking for: Bag\n\n_You can check your spelling, find synonyms and many more, just open the menu_${fingerDown} _and explore_\n*ENJOY* ${oneEye}`,
       { parse_mode: "Markdown" }
     );
-    API.sendMessage(ADMIN, `404 From\n${firstName} || ${userId}\n:${msg}`);
+    API.sendMessage(ADMIN, `404 from ${firstName} || ${userId}\n\n${msg}`);
     /*
     sendMessage(oribi, `Hi Oribi, thanks for your feedback, glad you liked it. We are always working hard to give you features that meets your needs. More updates are coming which we believe you will love. All the best ${smile}`)
     switch(msg) {
