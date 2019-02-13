@@ -61,13 +61,13 @@ class BrainController extends TelegramBaseController {
   /**
    * @param {Scope} $
    */
-  wordSearchHandler($, command, keyword) {
+  wordSearchHandler($, command, wordSuggestedByBot) {
     const user = $.message.chat.firstName || $.message.chat.lastName;
     const userId = $.message.chat.id;
     const clickedCommand = command || $.message.text;
 
-    if (clickedCommand == "🔎 Search" && keyword) {
-      this.findWordLogic($, keyword, user, userId);
+    if (clickedCommand == "🔎 Search" && wordSuggestedByBot) {
+      this.findWordLogic($, wordSuggestedByBot, user, userId);
     } else if (clickedCommand == "🔎 Search") {
       let scope = $;
       $.runInlineMenu({
@@ -373,11 +373,12 @@ class BrainController extends TelegramBaseController {
 
   findWordLogic($, msg, user, userId) {
     let found = false;
-    let words,
-      matched,
-      page,
-      input,
-      suggestions = [];
+    let words;
+    let matched;
+    let page;
+    let input;
+    let synonymOfWord = "";
+    let suggestions = [];
     let numErr = false;
 
     // This means the user is searching for a word
@@ -399,6 +400,8 @@ class BrainController extends TelegramBaseController {
               const foundAll = [];
               const reg = new RegExp("\\b" + input + "\\b", "gi");
               const matchWord = word.match(reg);
+
+              synonymOfWord = `Find synonyms of ${input}`;
 
               if (matchWord) {
                 found = true;
@@ -472,10 +475,15 @@ class BrainController extends TelegramBaseController {
         this.sendImage($, msg, user, userId, page, matched);
       }
 
-      const btnText = "Search Again";
-
       setTimeout(() => {
-        this.searchAgain($, "What do you want to do next?", btnText);
+        const searchAgainParams = {
+          $,
+          question: "What do you want to do next?",
+          search: { text: "Search Again", word: "" },
+          synonym: { text: synonymOfWord, word: input }
+        };
+
+        this.searchAgain(searchAgainParams);
       }, 2000);
     } else if (!found && !numErr) {
       API.sendMessage(
@@ -483,35 +491,44 @@ class BrainController extends TelegramBaseController {
         `404\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
       );
 
-      let btnText = "Try Again";
+      let searchAgainText = "Try Again";
       let suggest = "";
-      let keyword;
+      let wordSuggestedByBot = "";
 
       if (suggestions.length) {
         suggest = `\n\nDid you mean ${
           suggestions.length === 1 ? "" : "any of these: "
         }${suggestions.join(", ")}?`;
 
-        keyword = suggestions[0];
-        btnText = `Search for ${keyword}`;
+        wordSuggestedByBot = suggestions[0];
+        searchAgainText = `Search for ${wordSuggestedByBot}`;
       }
 
       const question = `Sorry ${user} ${
         emojis.sad
       }, ${input} wasn't found.${suggest}`;
 
-      this.searchAgain($, question, btnText, keyword);
+      const searchAgainParams = {
+        $,
+        question,
+        search: { text: searchAgainText, word: wordSuggestedByBot },
+        synonym: { text: synonymOfWord, word: input }
+      };
+
+      this.searchAgain(searchAgainParams);
     }
   }
 
-  searchAgain($, question, btnText, keyword = "") {
+  searchAgain(params) {
+    const { $, question, search, synonym } = params;
+
     $.runInlineMenu({
       layout: 1,
       method: "sendMessage",
       params: [question],
       menu: [
         {
-          text: btnText,
+          text: search.text,
           callback: query => {
             const { id } = query;
 
@@ -519,19 +536,31 @@ class BrainController extends TelegramBaseController {
               text: "Lets go"
             });
 
-            this.wordSearchHandler($, "🔎 Search", keyword);
+            this.wordSearchHandler($, "🔎 Search", search.word);
           }
         },
         {
-          text: "Feedback",
+          text: synonym.text,
           callback: query => {
             const { id } = query;
 
             API.answerCallbackQuery(id, {
-              text: "Thank you"
+              text: "Lets go"
             });
 
-            this.feedbackHandler($);
+            dictionary.synonymHandler($, synonym.word);
+          }
+        },
+        {
+          text: "Alphabet Search",
+          callback: query => {
+            const { id } = query;
+
+            API.answerCallbackQuery(id, {
+              text: "Got it."
+            });
+
+            this.alphSearchHandler($, "🔎 Find By Alphabet 🔤");
           }
         }
       ]
