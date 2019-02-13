@@ -155,12 +155,9 @@ class DictionaryController extends TelegramBaseController {
 
       if (correct) {
         //Your value is correct
-        $.sendMessage(
-          `Hey ${user}, your spelling is correct ${
-            emojis.smile
-          }, go ahead and find the meaning of the word\n\n1. Open the *MENU* (_The ICON on the top-right of your keyboard_),\n2. Click Search \n3. Enter the word: *${word}*`,
-          { parse_mode: "Markdown" }
-        );
+        $.sendMessage(`Correct ${emojis.smile}, click /${word} to find it`, {
+          parse_mode: "Markdown"
+        });
         telegramBot.api.sendMessage(
           myChatId,
           `User ${user} is using the spellCheckerHandler, but no suggestion for word: ${word}`
@@ -183,11 +180,7 @@ class DictionaryController extends TelegramBaseController {
               emojis.sad
             }. I got a suggestion${emojis.oneEye} for you:\n\n${
               emojis.fingerRight
-            } ${
-              suggestions[0]
-            }.\n\nTo find the meaning of the word by \n1. Opening the *MENU* (_The ICON on the top-right of your keyboard_),\n2. Click Search \n3. Enter the suggestion: *${
-              suggestions[0]
-            }*`,
+            } /${suggestions[0]}.`,
             { parse_mode: "Markdown" }
           );
           telegramBot.api.sendMessage(
@@ -231,13 +224,9 @@ class DictionaryController extends TelegramBaseController {
           );
         } else if (Array.isArray(synonyms) && synonyms.length === 1) {
           $.sendMessage(
-            `Hey ${user}, I've got a synonym for you ${emojis.oneEye}:\n\n${
-              emojis.fingerRight
-            } ${
+            `I've got a synonym for you:\n\n${emojis.fingerRight} /${
               synonyms[0]
-            }.\n\nTo find the meaning of the word by \n\n1. Opening the *MENU* (_The ICON on the top-right of your keyboard_),\n2. Click Search \n3. Enter the word: ${
-              synonyms[0]
-            }`,
+            }.`,
             { parse_mode: "Markdown" }
           );
           telegramBot.api.sendMessage(
