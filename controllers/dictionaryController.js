@@ -67,9 +67,9 @@ class DictionaryController extends TelegramBaseController {
           );
         }
       });
-    } else if (msg.length > 1 && msg.match(/[a-z]/i)) {
+    } else if (word.length > 1 && word.match(/[a-z]/i)) {
       //Logic to suggest
-      this.spellCheckerLogic($, msg, user, userId);
+      this.spellCheckerLogic($, word, user, userId);
     } else {
       //Sorry your word is invalid
       $.sendMessage(
@@ -119,9 +119,9 @@ class DictionaryController extends TelegramBaseController {
           );
         }
       });
-    } else if (word.length > 1 && word.match(/[a-z]/i)) {
+    } else if (msg.length > 1 && msg.match(/[a-z]/i)) {
       //Logic to suggest
-      this.findSynonymLogic($, word, user, userId);
+      this.findSynonymLogic($, msg, user, userId);
     } else {
       //Sorry your word is invalid
       $.sendMessage(
