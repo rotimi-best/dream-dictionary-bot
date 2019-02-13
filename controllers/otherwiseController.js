@@ -1,27 +1,34 @@
-'use strict'
+"use strict";
 
-const Telegram = require('telegram-node-bot');
-const BaseController = Telegram.TelegramBaseController
-const telegramBot = require('../index.js')
+const Telegram = require("telegram-node-bot");
+const BaseController = Telegram.TelegramBaseController;
+const telegramBot = require("../index.js");
 
-let coolGlasses = '😎'
-let oneEye = '😉';
-let fingerRight = '👉';
-let smile = '🙂';
-let fingerDown = '👇';
+let coolGlasses = "😎";
+let oneEye = "😉";
+let fingerRight = "👉";
+let smile = "🙂";
+let fingerDown = "👇";
 
 class OtherwiseController extends BaseController {
-    /**
-     * @param {Scope} $
-     */
-    handle($) {
-        const myChatId = '380473669';
-        let firstName = $.message.chat.firstName ? $.message.chat.firstName : $.message.chat.lastName;
-        let msg = $.message.text ? $.message.text : 'Not a text';
-        let userId = $.message.chat.id;
-        $.sendMessage(`To search for a word, e.g Bag\n\n1. Open *MENU* (_The ICON on the top-right of your keyboard_)\n2. Click 🔎 Search\n3. Enter the *WORD* you are looking for: Bag\n\n_You can check your spelling, find synonyms and many more, just open the menu_${fingerDown} _and explore_\n*ENJOY* ${oneEye}`, { parse_mode: "Markdown" })
-        telegramBot.api.sendMessage(myChatId, `GeneralError =>\nUsername: ${firstName}\nUserId: ${userId}\nInput: ${msg}`)
-        /* switch(msg) {
+  /**
+   * @param {Scope} $
+   */
+  handle($) {
+    const { ADMIN_CHAT_ID } = process.env;
+
+    const firstName = $.message.chat.firstName || $.message.chat.lastName;
+    const msg = $.message.text ? $.message.text : "Not a text";
+    const userId = $.message.chat.id;
+    $.sendMessage(
+      `To search for a word, e.g Bag\n\n1. Open *MENU* (_The ICON on the top-right of your keyboard_)\n2. Click 🔎 Search\n3. Enter the *WORD* you are looking for: Bag\n\n_You can check your spelling, find synonyms and many more, just open the menu_${fingerDown} _and explore_\n*ENJOY* ${oneEye}`,
+      { parse_mode: "Markdown" }
+    );
+    telegramBot.api.sendMessage(
+      ADMIN_CHAT_ID,
+      `404 =>\nUsername: ${firstName}\nUserId: ${userId}\nInput: ${msg}`
+    );
+    /* switch(msg) {
             case '💾 Save' :
                $.sendMessage(`You can send me the content of your dream and I will save it ${oneEye}.\n\nPlease click this ${fingerRight} /save to continue`);
                 break;
@@ -44,6 +51,6 @@ class OtherwiseController extends BaseController {
                 //$.sendMessage(`To search for a word, e.g Bag\n\nJust type this:\n/findbyword Bag\n\nClick /help to see all I can do ${coolGlasses}`)
                 
         } */
-    }
+  }
 }
-module.exports = OtherwiseController
+module.exports = OtherwiseController;

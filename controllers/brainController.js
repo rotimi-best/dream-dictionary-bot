@@ -12,7 +12,7 @@ const { ALPHABETS } = require("../helpers/constants");
 const { editWordOrPageQA } = require("../modules");
 const bot = require("../index.js");
 
-const myChatId = "380473669";
+const { ADMIN_CHAT_ID } = process.env;
 
 const emojis = {
   success: "🕺",
@@ -52,7 +52,7 @@ class BrainController extends TelegramBaseController {
       : $.message.chat.lastName;
     let userId = $.message.chat.id;
     bot.api.sendMessage(
-      myChatId,
+      ADMIN_CHAT_ID,
       `Someone tried to save his dream\n\nUsername: ${user}\nUserId: ${userId}`
     );
   }
@@ -91,7 +91,7 @@ class BrainController extends TelegramBaseController {
                     }, your input isn't valid. click /help for more info.`
                   );
                   bot.api.sendMessage(
-                    myChatId,
+                    ADMIN_CHAT_ID,
                     `InvalidInputError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: Invalid input`
                   );
                 }
@@ -114,7 +114,7 @@ class BrainController extends TelegramBaseController {
                     }, your input isn't valid. click /help for more info.`
                   );
                   bot.api.sendMessage(
-                    myChatId,
+                    ADMIN_CHAT_ID,
                     `InvalidInputError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: Invalid input`
                   );
                 }
@@ -130,7 +130,7 @@ class BrainController extends TelegramBaseController {
         }, your input isn't valid. click /help for more info.`
       );
       bot.api.sendMessage(
-        myChatId,
+        ADMIN_CHAT_ID,
         `InvalidInputError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${clickedCommand}`
       );
     }
@@ -162,7 +162,7 @@ class BrainController extends TelegramBaseController {
         }, your input isn't valid. click /help for more info.`
       );
       bot.api.sendMessage(
-        myChatId,
+        ADMIN_CHAT_ID,
         `InvalidInputError[/findbyalpahbet] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
       );
     }
@@ -180,7 +180,7 @@ class BrainController extends TelegramBaseController {
     let user = $.message.chat.firstName || $.message.chat.lastName;
     let userId = $.message.chat.id;
     bot.api.sendMessage(
-      myChatId,
+      ADMIN_CHAT_ID,
       `Someone needs help.\nUsername: ${user}\nUserId: ${userId}`
     );
   }
@@ -286,7 +286,7 @@ class BrainController extends TelegramBaseController {
     $.waitForRequest.then($ => {
       let val = $.message.text;
       if (val) {
-        bot.api.sendMessage(myChatId, `Feedback from ${user}\n\n ${val}`);
+        bot.api.sendMessage(ADMIN_CHAT_ID, `Feedback from ${user}\n\n ${val}`);
         $.sendMessage(`Thanks for your feedback, it is really appreciated`);
         $.sendSticker(stickers.thanksStickerLionKing);
       } else {
@@ -296,7 +296,7 @@ class BrainController extends TelegramBaseController {
           }, your input isn't valid. click /help for more info.`
         );
         bot.api.sendMessage(
-          myChatId,
+          ADMIN_CHAT_ID,
           `InvalidInputError[feedbackHandler] =>\nUsername: ${user}\nUserId: ${userId}\nInput: Invalid input`
         );
       }
@@ -342,7 +342,7 @@ class BrainController extends TelegramBaseController {
       : $.message.chat.lastName;
     let userId = $.message.chat.id;
     bot.api.sendMessage(
-      myChatId,
+      ADMIN_CHAT_ID,
       `You have a new user.\n\nUsername: ${user}\nUserId: ${userId}`
     );
   }
@@ -429,7 +429,7 @@ class BrainController extends TelegramBaseController {
           }, your input isn't valid. Make sure you entered an english word`
         );
         bot.api.sendMessage(
-          myChatId,
+          ADMIN_CHAT_ID,
           `NotEnglishError =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
         );
       }
@@ -447,7 +447,7 @@ class BrainController extends TelegramBaseController {
         );
 
         bot.api.sendMessage(
-          myChatId,
+          ADMIN_CHAT_ID,
           `NotEnglishError =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
         );
       }
@@ -461,7 +461,7 @@ class BrainController extends TelegramBaseController {
 
       $.sendMessage(question);
 
-      bot.api.sendMessage(myChatId, `User ${user} searched for ${matched}`);
+      bot.api.sendMessage(ADMIN_CHAT_ID, `User ${user} searched for ${matched}`);
 
       if (Array.isArray(page)) {
         page.forEach(pageElement => {
@@ -478,7 +478,7 @@ class BrainController extends TelegramBaseController {
       }, 2000);
     } else if (!found && !numErr) {
       bot.api.sendMessage(
-        myChatId,
+        ADMIN_CHAT_ID,
         `404\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
       );
 
@@ -555,10 +555,10 @@ class BrainController extends TelegramBaseController {
           }`
         );
         bot.api.sendMessage(
-          myChatId,
+          ADMIN_CHAT_ID,
           `ImageSendError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}\nPage: ${page}`
         );
-        bot.api.sendMessage(myChatId, `Description => ${error.description}`);
+        bot.api.sendMessage(ADMIN_CHAT_ID, `Description => ${error.description}`);
       });
     } else {
       $.sendMessage(
@@ -570,7 +570,7 @@ class BrainController extends TelegramBaseController {
         }`
       );
       bot.api.sendMessage(
-        myChatId,
+        ADMIN_CHAT_ID,
         `ImageSendError[/findbyword] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}\nPage: ${page}\nDescription => Cannot read property 'url' of undefined`
       );
     }
@@ -601,7 +601,7 @@ class BrainController extends TelegramBaseController {
         }
 
         bot.api.sendMessage(
-          myChatId,
+          ADMIN_CHAT_ID,
           `User ${user} used the alphabetSearchHandler`
         );
       }
@@ -613,7 +613,7 @@ class BrainController extends TelegramBaseController {
         }, Such alphabet doesn't exist, check your spelling`
       );
       bot.api.sendMessage(
-        myChatId,
+        ADMIN_CHAT_ID,
         `NotFoundError[/findbyalpahbet] =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
       );
     }
