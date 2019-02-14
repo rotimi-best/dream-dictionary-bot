@@ -22,8 +22,9 @@ class OtherwiseController extends BaseController {
     const firstName = $.message.chat.firstName || $.message.chat.lastName;
     const msg = $.message.text ? $.message.text : "Not a text";
     const userId = $.message.chat.id;
+    const testIfEng = RegExp('[a-z A-Z]');
 
-    if (msg) {
+    if (testIfEng.test(msg)) {
         brainController.wordSearchHandler($, "🔎 Search", msg);
 
         API.sendMessage(ADMIN, `${firstName} Search from otherwise controller for ${msg}`);
