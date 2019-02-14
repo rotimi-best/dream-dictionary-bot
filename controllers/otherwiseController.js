@@ -24,7 +24,7 @@ class OtherwiseController extends BaseController {
     const userId = $.message.chat.id;
 
     if (msg) {
-        brainController.wordSearchHandler($, msg);
+        brainController.wordSearchHandler($, "🔎 Search", msg);
 
         API.sendMessage(ADMIN, `${firstName} Search from otherwise controller for ${msg}`);
     } else {
