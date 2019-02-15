@@ -440,6 +440,8 @@ class BrainController extends TelegramBaseController {
           ADMIN,
           `NotEnglishError =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
         );
+        
+        return;
       }
     } // This means the user is searching for a page
     else {
@@ -458,6 +460,8 @@ class BrainController extends TelegramBaseController {
           ADMIN,
           `NotEnglishError =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
         );
+        
+        return;
       }
     }
 

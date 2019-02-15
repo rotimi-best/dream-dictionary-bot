@@ -262,9 +262,9 @@ class DictionaryController extends TelegramBaseController {
     if (func == "spellchecker") {
       serialized = `The word ${word} is incorrect ${emojis.sad}. Suggestions: ${
         emojis.oneEye
-      }\n\n Click to find`;
+      }\n\n Click to search dictionary\n`;
     } else if (func == "synonym") {
-      serialized = `Synonymns: ${emojis.oneEye}\n\n Click to find`;
+      serialized = `Synonymns: ${emojis.oneEye}\n\n Click to search dictionary\n`;
     }
 
     suggestions.forEach(suggestion => {
