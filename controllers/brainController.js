@@ -381,6 +381,7 @@ class BrainController extends TelegramBaseController {
     let matched;
     let page;
     let input;
+    let meaning = "";
     let synonymOfWord = "";
     let suggestions = [];
     let numErr = false;
@@ -394,11 +395,11 @@ class BrainController extends TelegramBaseController {
       const firstLetter = input.match(/\w/);
 
       if (firstLetter) {
-        lib.arr.forEach(element => {
-          let alphabet = element.container.alph;
+        lib.arr.forEach(el => {
+          let alphabet = el.container.alph;
 
           if (alphabet == firstLetter) {
-            words = element.container.words;
+            words = el.container.words;
 
             words.forEach((word, index) => {
               const foundAll = [];
@@ -410,7 +411,8 @@ class BrainController extends TelegramBaseController {
               if (matchWord) {
                 found = true;
                 matched = matchWord["0"];
-                page = element.container.pages[index];
+                page = el.container.pages[index];
+                meaning = el.container.meanings[index] || "";
               }
 
               for (let i in input) {
@@ -440,7 +442,7 @@ class BrainController extends TelegramBaseController {
           ADMIN,
           `NotEnglishError =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
         );
-        
+
         return;
       }
     } // This means the user is searching for a page
@@ -460,27 +462,29 @@ class BrainController extends TelegramBaseController {
           ADMIN,
           `NotEnglishError =>\nUsername: ${user}\nUserId: ${userId}\nInput: ${msg}`
         );
-        
+
         return;
       }
     }
 
     if (found) {
-      const question = `Hurray ${
-        emojis.success
-      }, there is an interpretation for ${matched.charAt(0).toUpperCase() +
-        matched.slice(1)}. \n\nHere you go..`;
-
-      $.sendMessage(question);
-
-      API.sendMessage(ADMIN, `User ${user} searched for ${matched}`);
-
-      if (Array.isArray(page)) {
-        page.forEach(pageElement => {
-          this.sendImage($, msg, user, userId, pageElement);
-        });
+      if (meaning) {
+        $.sendMessage(meaning, { parse_mode: "Markdown" });
       } else {
-        this.sendImage($, msg, user, userId, page, matched);
+        const response = `Hurray ${
+          emojis.success
+        }, there is an interpretation for ${matched.charAt(0).toUpperCase() +
+          matched.slice(1)}. \n\nHere you go..`;
+
+        $.sendMessage(response);
+
+        if (Array.isArray(page)) {
+          page.forEach(pageElement => {
+            this.sendImage($, msg, user, userId, pageElement);
+          });
+        } else {
+          this.sendImage($, msg, user, userId, page, matched);
+        }
       }
 
       setTimeout(() => {
@@ -493,6 +497,8 @@ class BrainController extends TelegramBaseController {
 
         this.searchAgain(searchAgainParams);
       }, 2000);
+
+      API.sendMessage(ADMIN, `User ${user} searched for ${matched}`);
     } else if (!found && !numErr) {
       API.sendMessage(
         ADMIN,
@@ -617,11 +623,11 @@ class BrainController extends TelegramBaseController {
   findAlphabetLogic($, msg, user, userId, editMsgId, chat_id) {
     let input = msg.toLowerCase();
     let checker = false;
-    lib.arr.forEach(element => {
-      let alphabet = element.container.alph;
+    lib.arr.forEach(el => {
+      let alphabet = el.container.alph;
       if (alphabet == input) {
-        let words = element.container.words;
-        let pages = element.container.pages;
+        let words = el.container.words;
+        let pages = el.container.pages;
         checker = true;
 
         const [msg1, msg2 = ""] = this._serializeList(user, words, pages);
