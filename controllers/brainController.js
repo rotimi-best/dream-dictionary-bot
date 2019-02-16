@@ -475,13 +475,6 @@ class BrainController extends TelegramBaseController {
       if (meaning) {
         $.sendMessage(meaning, { parse_mode: "Markdown" });
       } else {
-        const response = `Hurray ${
-          emojis.success
-        }, there is an interpretation for ${matched.charAt(0).toUpperCase() +
-          matched.slice(1)}. \n\nHere you go..`;
-
-        $.sendMessage(response);
-
         if (Array.isArray(page)) {
           page.forEach(pageElement => {
             this.sendImage($, msg, user, userId, pageElement);
@@ -490,7 +483,6 @@ class BrainController extends TelegramBaseController {
           this.sendImage($, msg, user, userId, page, matched);
         }
       }
-
       // setTimeout(() => {
       //   const searchAgainParams = {
       //     $,
