@@ -491,16 +491,16 @@ class BrainController extends TelegramBaseController {
         }
       }
 
-      setTimeout(() => {
-        const searchAgainParams = {
-          $,
-          question: "What do you want to do next?",
-          search: { text: "Search Again", word: "" },
-          synonym: { text: synonymOfWord, word: input }
-        };
+      // setTimeout(() => {
+      //   const searchAgainParams = {
+      //     $,
+      //     question: "What do you want to do next?",
+      //     search: { text: "Search Again", word: "" },
+      //     synonym: { text: synonymOfWord, word: input }
+      //   };
 
-        this.searchAgain(searchAgainParams);
-      }, 2000);
+      //   this.searchAgain(searchAgainParams);
+      // }, 2000);
 
       API.sendMessage(ADMIN, `User ${user} searched for ${matched}`);
     } else if (!found && !numErr) {
