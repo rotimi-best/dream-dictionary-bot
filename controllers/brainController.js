@@ -66,6 +66,10 @@ class BrainController extends TelegramBaseController {
     const userId = $.message.chat.id;
     const clickedCommand = command || $.message.text;
 
+    if (clickedCommand === "/start") {
+      return;
+    }
+
     if (clickedCommand == "🔎 Search" && wordSuggestedByBot) {
       this.findWordLogic($, wordSuggestedByBot, user, userId);
     } else if (clickedCommand.charAt(0) === "/") {

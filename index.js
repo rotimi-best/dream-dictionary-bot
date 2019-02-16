@@ -24,6 +24,7 @@ bot.router.callbackQuery(new CallbackQueryController());
 
 bot.router
   .when(new TextCommand("💾 Save", "saveCommand"), new BrainController())
+  .when(new TextCommand("/start", "startCommand"), new BrainController())
   .when(
     new TextCommand("🔎 Search", "wordSearchCommand"),
     new BrainController()
@@ -49,6 +50,5 @@ bot.router
     new TextCommand("🗣👂 Feedback", "feedbackCommand"),
     new BrainController()
   )
-  .when(new TextCommand("/start", "startCommand"), new BrainController())
   .when(new TextCommand("/test", "testCommand"), new BrainController())
   .otherwise(new OtherwiseController());
