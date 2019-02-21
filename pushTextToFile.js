@@ -29,9 +29,9 @@ function getImageFromImage(imageUrl) {
 
 async function appendTextToFile() {
   try {
-    for (let i = 21; i < 101; i++) {
+    for (let i = 22; i < 101; i++) {
       const image = jsonImages.images[i];
-      stream.write(`======================PAGE${i}========================`);
+      stream.write(`====================== PAGE ${i} ========================`);
 
       const text = await getImageFromImage(image);
 
@@ -39,7 +39,7 @@ async function appendTextToFile() {
 
       console.log(`Waiting for 8 seconds then move to page ${i}`);
 
-      await sleep(8000);
+      await sleep(8);
     }
   } catch (error) {
     console.log(error);
