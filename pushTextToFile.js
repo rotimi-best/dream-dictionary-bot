@@ -3,11 +3,11 @@ const fs = require("fs");
 const imagesFile = fs.readFileSync("images/images.json", "utf8");
 const jsonImages = JSON.parse(imagesFile);
 
-const path = "/text/meaning_old.txt";
+const path = "/text/meanings/f.txt";
 
 const sleep = sec => new Promise(res => setTimeout(res, sec * 1000));
 
-const stream = fs.createWriteStream(`${process.cwd()}/text/meaning_old.txt`, {
+const stream = fs.createWriteStream(`${process.cwd()}${path}`, {
   flags: "a"
 });
 
@@ -29,17 +29,22 @@ function getImageFromImage(imageUrl) {
 
 async function appendTextToFile() {
   try {
-    for (let i = 22; i < 101; i++) {
-      const image = jsonImages.images[i];
-      stream.write(`====================== PAGE ${i} ========================`);
+    for (let i = 356; i < 408; i++) {
+      const image = jsonImages.images[i] || "";
 
-      const text = await getImageFromImage(image);
+      if (image.length) {
+        stream.write(
+          `====================== PAGE ${i} ========================`
+        );
 
-      stream.write(text);
+        const text = await getImageFromImage(image);
 
-      console.log(`Waiting for 8 seconds then move to page ${i}`);
+        stream.write(text);
 
-      await sleep(8);
+        console.log(`Waiting for 8 seconds then move to page ${i + 1}`);
+
+        await sleep(8);
+      }
     }
   } catch (error) {
     console.log(error);
