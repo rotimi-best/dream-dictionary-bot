@@ -579,7 +579,7 @@ class BrainController extends TelegramBaseController {
 
   // Send images for a particular page in the dream dictionary
   sendImage($, msg, user, userId, page, matched) {
-    const imagesFile = fs.readFileSync("variables/images.json", "utf8");
+    const imagesFile = fs.readFileSync("images/images.json", "utf8");
     const jsonImages = JSON.parse(imagesFile);
     const image = jsonImages.images[page];
 
