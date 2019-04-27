@@ -23,15 +23,7 @@ const pages = [
   { alph: "z", min: 823, max: 827 }
 ];
 
-
-// const index = 9; // 16 Not ran yet
-// const index = 10; // 16
-// const index = 11; // 16
-// const index = 12; // 16
-// const index = 13; // 16
-// const index = 14; // 16
-// const index = 15; // 16
-// const index = 16; // 16
+const index = 16; // 16
 
 const path = `/text/meanings/${pages[index].alph}.txt`;
 
