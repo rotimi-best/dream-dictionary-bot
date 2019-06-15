@@ -19,7 +19,7 @@ class OtherwiseController extends BaseController {
   handle($) {
     const { ADMIN } = process.env;
 
-    const firstName = $.message.chat.firstName || $.message.chat.lastName;
+    const firstName = $.message.from.firstName || $.message.from.lastName;
     const msg = $.message.text ? $.message.text : "Not a text";
     const userId = $.message.chat.id;
     const testIfEng = RegExp("[a-z A-Z]");

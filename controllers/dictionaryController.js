@@ -36,7 +36,7 @@ class DictionaryController extends TelegramBaseController {
    * @param {Scope} $
    */
   spellCheckerHandler($, text) {
-    let user = $.message.chat.firstName || $.message.chat.lastName;
+    let user = $.message.from.firstName || $.message.from.lastName;
     let userId = $.message.chat.id;
     let msg = text ? text : $.message.text;
     let word = msg
@@ -88,9 +88,9 @@ class DictionaryController extends TelegramBaseController {
    * @param {Scope} $
    */
   synonymHandler($, text) {
-    let user = $.message.chat.firstName
-      ? $.message.chat.firstName
-      : $.message.chat.lastName;
+    let user = $.message.from.firstName
+      ? $.message.from.firstName
+      : $.message.from.lastName;
     let userId = $.message.chat.id;
     let msg = text ? text : $.message.text;
     let word = msg
@@ -264,7 +264,9 @@ class DictionaryController extends TelegramBaseController {
         emojis.oneEye
       }\n\n Click to search dictionary\n`;
     } else if (func == "synonym") {
-      serialized = `Synonymns: ${emojis.oneEye}\n\n Click to search dictionary\n`;
+      serialized = `Synonymns: ${
+        emojis.oneEye
+      }\n\n Click to search dictionary\n`;
     }
 
     suggestions.forEach(suggestion => {
