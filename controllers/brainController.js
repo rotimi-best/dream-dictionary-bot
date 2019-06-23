@@ -692,6 +692,11 @@ class BrainController extends TelegramBaseController {
 
     return menu;
   }
+  
+  // Get the full sentence
+  // split by spaace
+  // sort alphabetically
+  // group into alphabets (a => [ab, ac, ad]) etc....
 
   get routes() {
     return {
