@@ -9,7 +9,7 @@ const DictionaryController = require("./dictionaryController");
 let dictionary = new DictionaryController();
 
 const { ALPHABETS } = require("../helpers/constants");
-const { editWordOrPageQA } = require("../modules");
+const { editWordOrPageQA, generateMeaning } = require("../modules");
 const bot = require("../index.js");
 const { api: API } = bot;
 
@@ -44,9 +44,7 @@ class BrainController extends TelegramBaseController {
    */
   saveHandler($) {
     $.sendMessage(
-      `The save functionality is not ready yet. It should be anytime soon ${
-        emojis.smile
-      }`
+      `The save functionality is not ready yet. It should be anytime soon ${emojis.smile}`
     );
     let user = $.message.from.firstName
       ? $.message.from.firstName
@@ -98,9 +96,7 @@ class BrainController extends TelegramBaseController {
                   this.findWordLogic($, userReply, user, userId);
                 } else {
                   $.sendMessage(
-                    `Sorry ${user} ${
-                      emojis.sad
-                    }, your input isn't valid. click /help for more info.`
+                    `Sorry ${user} ${emojis.sad}, your input isn't valid. click /help for more info.`
                   );
                   API.sendMessage(
                     ADMIN,
@@ -121,9 +117,7 @@ class BrainController extends TelegramBaseController {
                   this.findWordLogic($, userReply, user, userId);
                 } else {
                   $.sendMessage(
-                    `Sorry ${user} ${
-                      emojis.sad
-                    }, your input isn't valid. click /help for more info.`
+                    `Sorry ${user} ${emojis.sad}, your input isn't valid. click /help for more info.`
                   );
                   API.sendMessage(
                     ADMIN,
@@ -137,9 +131,7 @@ class BrainController extends TelegramBaseController {
       });
     } else {
       $.sendMessage(
-        `Sorry ${user} ${
-          emojis.sad
-        }, your input isn't valid. click /help for more info.`
+        `Sorry ${user} ${emojis.sad}, your input isn't valid. click /help for more info.`
       );
       API.sendMessage(
         ADMIN,
@@ -169,9 +161,7 @@ class BrainController extends TelegramBaseController {
       });
     } else {
       $.sendMessage(
-        `Sorry ${user} ${
-          emojis.sad
-        }, your input isn't valid. click /help for more info.`
+        `Sorry ${user} ${emojis.sad}, your input isn't valid. click /help for more info.`
       );
       API.sendMessage(
         ADMIN,
@@ -303,9 +293,7 @@ class BrainController extends TelegramBaseController {
         $.sendSticker(stickers.thanksStickerLionKing);
       } else {
         $.sendMessage(
-          `Sorry ${user} ${
-            emojis.sad
-          }, your input isn't valid. click /help for more info.`
+          `Sorry ${user} ${emojis.sad}, your input isn't valid. click /help for more info.`
         );
         API.sendMessage(
           ADMIN,
@@ -402,13 +390,13 @@ class BrainController extends TelegramBaseController {
       const firstLetter = input.match(/\w/);
 
       if (firstLetter) {
-        lib.arr.forEach(el => {
+        lib.arr.filter(el => {
           let alphabet = el.container.alph;
 
           if (alphabet == firstLetter) {
             words = el.container.words;
 
-            words.forEach((word, index) => {
+            words.filter((word, index) => {
               const foundAll = [];
               const reg = new RegExp("\\b" + input + "\\b", "gi");
               const matchWord = word.match(reg);
@@ -419,7 +407,7 @@ class BrainController extends TelegramBaseController {
                 found = true;
                 matched = matchWord["0"];
                 page = el.container.pages[index];
-                meaning = el.container.meanings[index] || "";
+                meaning = generateMeaning(word);
               }
 
               for (let i in input) {
@@ -441,9 +429,7 @@ class BrainController extends TelegramBaseController {
         });
       } else {
         $.sendMessage(
-          `Sorry ${user} ${
-            emojis.sad
-          }, your input isn't valid. Make sure you entered an english word`
+          `Sorry ${user} ${emojis.sad}, your input isn't valid. Make sure you entered an english word`
         );
         API.sendMessage(
           ADMIN,
@@ -486,16 +472,6 @@ class BrainController extends TelegramBaseController {
           this.sendImage($, msg, user, userId, page, matched);
         }
       }
-      // setTimeout(() => {
-      //   const searchAgainParams = {
-      //     $,
-      //     question: "What do you want to do next?",
-      //     search: { text: "Search Again", word: "" },
-      //     synonym: { text: synonymOfWord, word: input }
-      //   };
-
-      //   this.searchAgain(searchAgainParams);
-      // }, 2000);
 
       API.sendMessage(ADMIN, `User ${user} searched for ${matched}`);
     } else if (!found && !numErr) {
@@ -517,9 +493,7 @@ class BrainController extends TelegramBaseController {
         searchAgainText = `Search for ${wordSuggestedByBot}`;
       }
 
-      const question = `Sorry ${user} ${
-        emojis.sad
-      }, ${input} wasn't found.${suggest}`;
+      const question = `Sorry ${user} ${emojis.sad}, ${input} wasn't found.${suggest}`;
 
       const searchAgainParams = {
         $,
@@ -648,9 +622,7 @@ class BrainController extends TelegramBaseController {
     });
     if (!checker) {
       $.sendMessage(
-        `Sorry ${user} ${
-          emojis.sad
-        }, Such alphabet doesn't exist, check your spelling`
+        `Sorry ${user} ${emojis.sad}, Such alphabet doesn't exist, check your spelling`
       );
       API.sendMessage(
         ADMIN,
@@ -692,7 +664,7 @@ class BrainController extends TelegramBaseController {
 
     return menu;
   }
-  
+
   // Get the full sentence
   // split by spaace
   // sort alphabetically

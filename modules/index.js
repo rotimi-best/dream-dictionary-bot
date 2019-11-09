@@ -1,3 +1,7 @@
+const interpretations = require("../text/meanings");
+
+const len = v => v.length;
+
 const findByAlphMenu = menuArgs => {
   const [alphabets, bot, callback, scope, user, userId] = menuArgs;
   const menu = [];
@@ -36,7 +40,24 @@ const editWordOrPageQA = (bot, questionCategory, callbackQuery) => {
   );
 };
 
+const generateMeaning = word => {
+  let meaning = "";
+
+  const wordParams = interpretations[word];
+
+  if (wordParams) {
+    const { title, introduction, meanings, bibleVerse } = wordParams;
+    meaning += `*${title}*\n\n`;
+    meaning += len(introduction) ? `_${introduction}_\n\n` : "";
+    meaning += meanings.reduce((acc, cur) => (acc += `⚬ ${cur.trim()}\n`), "");
+    meaning += len(bibleVerse) ? `\n_${bibleVerse}_` : "";
+  }
+
+  return meaning;
+};
+
 module.exports = {
   findByAlphMenu,
-  editWordOrPageQA
+  editWordOrPageQA,
+  generateMeaning
 };
