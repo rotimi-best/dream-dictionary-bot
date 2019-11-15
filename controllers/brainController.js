@@ -396,7 +396,7 @@ class BrainController extends TelegramBaseController {
           if (alphabet == firstLetter) {
             words = el.container.words;
 
-            words.filter((word, index) => {
+            words.forEach((word, index) => {
               const foundAll = [];
               const reg = new RegExp("\\b" + input + "\\b", "gi");
               const matchWord = word.match(reg);
@@ -409,7 +409,7 @@ class BrainController extends TelegramBaseController {
                 page = el.container.pages[index];
                 meaning = generateMeaning(word);
               }
-
+              
               for (let i in input) {
                 const iLetter = input[i];
                 const wLetter = word[i];
