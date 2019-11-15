@@ -422,7 +422,7 @@ class BrainController extends TelegramBaseController {
               }
 
               if (!foundAll.includes(0)) {
-                suggestions.push(word);
+                suggestions.push(`/${word}`);
               }
             });
           }
