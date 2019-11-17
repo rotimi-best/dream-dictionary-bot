@@ -59,25 +59,20 @@ class BrainController extends TelegramBaseController {
   /**
    * @param {Scope} $
    */
-  wordSearchHandler($, command, wordSuggestedByBot) {
+  wordSearchHandler($, command, wordSuggestedByBot = null) {
     const user = $.message.from.firstName || $.message.from.lastName;
     const userId = $.message.chat.id;
-    const clickedCommand = (command || $.message.text).replace(
+    const clickedCommand = (wordSuggestedByBot || command || $.message.text).replace(
       "@dream_dictionary_bot",
       ""
-    );
+    ).replace(/^\//, "");
+    
 
-    if (clickedCommand === "/start") {
+    if (clickedCommand === "start") {
       return;
     }
 
-    if (clickedCommand == "🔎 Search" && wordSuggestedByBot) {
-      this.findWordLogic($, wordSuggestedByBot, user, userId);
-    } else if (clickedCommand.charAt(0) === "/") {
-      wordSuggestedByBot = clickedCommand.split("/")[1];
-
-      this.findWordLogic($, wordSuggestedByBot, user, userId);
-    } else if (clickedCommand == "🔎 Search") {
+    if (clickedCommand == "🔎 Search") {
       let scope = $;
       $.runInlineMenu({
         layout: 2,
@@ -129,6 +124,8 @@ class BrainController extends TelegramBaseController {
           }
         ]
       });
+    } else if (clickedCommand) {
+      this.findWordLogic($, clickedCommand, user, userId);
     } else {
       $.sendMessage(
         `Sorry ${user} ${emojis.sad}, your input isn't valid. click /help for more info.`
@@ -487,7 +484,7 @@ class BrainController extends TelegramBaseController {
       if (suggestions.length) {
         suggest = `\n\nDid you mean ${
           suggestions.length === 1 ? "" : "any of these: "
-        }${suggestions.join(", ")}?`;
+        }${suggestions.join(", ")}?\n\nJust click on any of the above and I will find the meaning ${emojis.oneEye}`;
 
         wordSuggestedByBot = suggestions[0];
         searchAgainText = `Search for ${wordSuggestedByBot}`;
@@ -538,18 +535,18 @@ class BrainController extends TelegramBaseController {
             dictionary.synonymHandler($, synonym.word);
           }
         },
-        {
-          text: "Alphabet Search",
-          callback: query => {
-            const { id } = query;
+//         {
+//           text: "Alphabet Search",
+//           callback: query => {
+//             const { id } = query;
 
-            API.answerCallbackQuery(id, {
-              text: "Got it."
-            });
+//             API.answerCallbackQuery(id, {
+//               text: "Got it."
+//             });
 
-            this.alphSearchHandler($, "🔎 Find By Alphabet 🔤");
-          }
-        }
+//             this.alphSearchHandler($, "🔎 Find By Alphabet 🔤");
+//           }
+//         }
       ]
     });
   }
