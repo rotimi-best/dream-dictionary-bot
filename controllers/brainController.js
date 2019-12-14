@@ -66,7 +66,7 @@ class BrainController extends TelegramBaseController {
       "@dream_dictionary_bot",
       ""
     ).replace(/^\//, "");
-    
+
 
     if (clickedCommand === "start") {
       return;
@@ -359,7 +359,7 @@ class BrainController extends TelegramBaseController {
 
       serialized += `/${word.charAt(0).toUpperCase() + word.slice(1)} (pg. ${
         pages[index]
-      }) \n`;
+        }) \n`;
     });
 
     messages.push(serialized);
@@ -406,7 +406,7 @@ class BrainController extends TelegramBaseController {
                 page = el.container.pages[index];
                 meaning = generateMeaning(word);
               }
-              
+
               for (let i in input) {
                 const iLetter = input[i];
                 const wLetter = word[i];
@@ -484,7 +484,7 @@ class BrainController extends TelegramBaseController {
       if (suggestions.length) {
         suggest = `\n\nDid you mean ${
           suggestions.length === 1 ? "" : "any of these: "
-        }${suggestions.join(", ")}?\n\nJust click on any of the above and I will find the meaning ${emojis.oneEye}`;
+          }${suggestions.join(", ")}?\n\nJust click on any of the above and I will find the meaning ${emojis.oneEye}`;
 
         wordSuggestedByBot = suggestions[0];
         searchAgainText = `Search for ${wordSuggestedByBot}`;
@@ -535,18 +535,18 @@ class BrainController extends TelegramBaseController {
             dictionary.synonymHandler($, synonym.word);
           }
         },
-//         {
-//           text: "Alphabet Search",
-//           callback: query => {
-//             const { id } = query;
+        //         {
+        //           text: "Alphabet Search",
+        //           callback: query => {
+        //             const { id } = query;
 
-//             API.answerCallbackQuery(id, {
-//               text: "Got it."
-//             });
+        //             API.answerCallbackQuery(id, {
+        //               text: "Got it."
+        //             });
 
-//             this.alphSearchHandler($, "🔎 Find By Alphabet 🔤");
-//           }
-//         }
+        //             this.alphSearchHandler($, "🔎 Find By Alphabet 🔤");
+        //           }
+        //         }
       ]
     });
   }
@@ -564,8 +564,8 @@ class BrainController extends TelegramBaseController {
           `Unfortunately ${user} ${emojis.sad}, no image for ${matched
             .charAt(0)
             .toUpperCase() +
-            matched.slice(1)} in page ${page} yet. It would be available soon${
-            emojis.coolGlasses
+          matched.slice(1)} in page ${page} yet. It would be available soon${
+          emojis.coolGlasses
           }`
         );
         API.sendMessage(
@@ -579,8 +579,8 @@ class BrainController extends TelegramBaseController {
         `Unfortunately ${user} ${emojis.sad}, no image for ${matched
           .charAt(0)
           .toUpperCase() +
-          matched.slice(1)} in page ${page} yet. It would be available soon${
-          emojis.coolGlasses
+        matched.slice(1)} in page ${page} yet. It would be available soon${
+        emojis.coolGlasses
         }`
       );
       API.sendMessage(
