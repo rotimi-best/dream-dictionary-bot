@@ -30,7 +30,7 @@ bot.router
     new BrainController()
   )
   .when(
-    new RegexpCommand(/\/[a-z A-Z]+/, "wordSearchCommand"),
+    new RegexpCommand(/\/[a-z A-Z 0-9]+/, "wordSearchCommand"),
     new BrainController()
   )
   .when(
