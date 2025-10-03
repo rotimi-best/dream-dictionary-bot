@@ -1,0 +1,17 @@
+node_modules
+npm-debug.log
+.git
+.gitignore
+README.md
+.env
+.nyc_output
+coverage
+.vscode
+*.md
+.DS_Store
+Dockerfile
+.dockerignore
+test.js
+jotter.txt
+/img
+/text/alphList.txt
